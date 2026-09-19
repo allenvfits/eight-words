@@ -4,8 +4,10 @@ struct HomeView: View {
     @EnvironmentObject private var dailyStore: DailyWordStore
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.scenePhase) private var scenePhase
 
     @State private var showingPaywall = false
+    @State private var showingSavedWords = false
     @State private var cardIdentity = UUID()
     @State private var showingSyllables = false
 
@@ -40,6 +42,14 @@ struct HomeView: View {
         .onAppear { dailyStore.beginIfNeeded() }
         .sheet(isPresented: $showingPaywall) {
             PaywallView()
+        }
+        .sheet(isPresented: $showingSavedWords) {
+            SavedWordsView()
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active {
+                dailyStore.beginIfNeeded()
+            }
         }
         .onChange(of: dailyStore.selectedDifficulty) { _, _ in
             showingSyllables = false
@@ -79,14 +89,44 @@ struct HomeView: View {
 
             Spacer()
 
-            if subscriptionManager.isSubscribed {
-                Text("PLUS")
-                    .font(.system(size: 11, weight: .black, design: .rounded))
-                    .tracking(0.8)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 7)
-                    .background(AppColors.sun, in: Capsule())
-                    .accessibilityLabel("Eight Words Plus active")
+            HStack(spacing: 8) {
+                Button {
+                    showingSavedWords = true
+                } label: {
+                    ZStack(alignment: .topTrailing) {
+                        Image(systemName: dailyStore.savedWordCount == 0 ? "heart" : "heart.fill")
+                            .font(.system(size: 17, weight: .bold))
+                            .foregroundStyle(AppColors.ink)
+                            .frame(width: 42, height: 42)
+                            .background(.white.opacity(0.82), in: Circle())
+
+                        if dailyStore.savedWordCount > 0 {
+                            Text("\(min(dailyStore.savedWordCount, 99))")
+                                .font(.system(size: 9, weight: .black, design: .rounded))
+                                .foregroundStyle(.white)
+                                .frame(minWidth: 17, minHeight: 17)
+                                .background(Color(red: 0.78, green: 0.31, blue: 0.29), in: Circle())
+                                .offset(x: 3, y: -2)
+                        }
+                    }
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Saved words, \(dailyStore.savedWordCount)")
+
+                if subscriptionManager.isSubscribed {
+                    Button {
+                        showingPaywall = true
+                    } label: {
+                        Text("PLUS")
+                            .font(.system(size: 11, weight: .black, design: .rounded))
+                            .tracking(0.8)
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 7)
+                            .background(AppColors.sun, in: Capsule())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Eight Words Plus active. Manage subscription")
+                }
             }
         }
         .padding(.top, 16)
@@ -328,10 +368,19 @@ struct HomeView: View {
     }
 
     private var footer: some View {
-        Text(subscriptionManager.isSubscribed ? "Unlimited words with Eight Words Plus" : "Eight new chances to learn — every day.")
-            .font(.system(size: 12, weight: .semibold, design: .rounded))
+        VStack(spacing: 10) {
+            Text(subscriptionManager.isSubscribed ? "Unlimited words with Eight Words Plus" : "Eight new chances to learn — every day.")
+                .font(.system(size: 12, weight: .semibold, design: .rounded))
+                .foregroundStyle(AppColors.muted)
+                .multilineTextAlignment(.center)
+
+            HStack(spacing: 18) {
+                Link("Privacy", destination: AppLinks.privacy)
+                Link("Support", destination: AppLinks.support)
+            }
+            .font(.system(size: 11, weight: .bold, design: .rounded))
             .foregroundStyle(AppColors.muted)
-            .multilineTextAlignment(.center)
+        }
     }
 
     private var backgroundShapes: some View {

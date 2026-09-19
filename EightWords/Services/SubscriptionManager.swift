@@ -22,22 +22,29 @@ final class SubscriptionManager: ObservableObject {
     }
 
     func prepare() async {
-        await loadProducts()
+        await loadProducts(showError: false)
         await refreshEntitlements()
     }
 
-    func loadProducts() async {
+    func loadProducts(showError: Bool = true) async {
         isLoading = true
         defer { isLoading = false }
+        errorMessage = nil
 
         do {
             monthlyProduct = try await Product.products(for: [Self.monthlyProductID]).first
+            if monthlyProduct == nil, showError {
+                errorMessage = "Eight Words Plus isn't available right now. Please try again later."
+            }
         } catch {
-            errorMessage = "We couldn't load the subscription. Please try again."
+            if showError {
+                errorMessage = "We couldn't load the subscription. Please try again."
+            }
         }
     }
 
     func purchase() async {
+        errorMessage = nil
         if monthlyProduct == nil {
             await loadProducts()
         }
@@ -70,6 +77,7 @@ final class SubscriptionManager: ObservableObject {
     }
 
     func restore() async {
+        errorMessage = nil
         isLoading = true
         defer { isLoading = false }
 
@@ -87,7 +95,8 @@ final class SubscriptionManager: ObservableObject {
         for await result in Transaction.currentEntitlements {
             guard let transaction = try? checkVerified(result) else { continue }
             if transaction.productID == Self.monthlyProductID,
-               transaction.revocationDate == nil {
+               transaction.revocationDate == nil,
+               transaction.expirationDate.map({ $0 > .now }) ?? true {
                 hasActiveSubscription = true
             }
         }

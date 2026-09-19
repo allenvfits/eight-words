@@ -17,6 +17,9 @@
 		A10000000000000000000008 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000008 /* PaywallView.swift */; };
 		A10000000000000000000009 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000009 /* Assets.xcassets */; };
 		A1000000000000000000000A /* SyllableGuide.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000D /* SyllableGuide.swift */; };
+		A1000000000000000000000B /* SavedWordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000E /* SavedWordsView.swift */; };
+		A1000000000000000000000C /* AppLinks.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000F /* AppLinks.swift */; };
+		A1000000000000000000000D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000010 /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +36,9 @@
 		A2000000000000000000000B /* EightWords.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = EightWords.storekit; sourceTree = "<group>"; };
 		A2000000000000000000000C /* EightWords.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EightWords.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2000000000000000000000D /* SyllableGuide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyllableGuide.swift; sourceTree = "<group>"; };
+		A2000000000000000000000E /* SavedWordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedWordsView.swift; sourceTree = "<group>"; };
+		A2000000000000000000000F /* AppLinks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLinks.swift; sourceTree = "<group>"; };
+		A20000000000000000000010 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +69,7 @@
 				A40000000000000000000005 /* Services */,
 				A40000000000000000000006 /* Views */,
 				A20000000000000000000009 /* Assets.xcassets */,
+				A20000000000000000000010 /* PrivacyInfo.xcprivacy */,
 				A2000000000000000000000A /* Info.plist */,
 				A2000000000000000000000B /* EightWords.storekit */,
 			);
@@ -88,6 +95,7 @@
 		A40000000000000000000005 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				A2000000000000000000000F /* AppLinks.swift */,
 				A20000000000000000000004 /* DailyWordStore.swift */,
 				A20000000000000000000005 /* SubscriptionManager.swift */,
 				A20000000000000000000006 /* SpeechService.swift */,
@@ -101,6 +109,7 @@
 			children = (
 				A20000000000000000000007 /* HomeView.swift */,
 				A20000000000000000000008 /* PaywallView.swift */,
+				A2000000000000000000000E /* SavedWordsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -172,6 +181,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A10000000000000000000009 /* Assets.xcassets in Resources */,
+				A1000000000000000000000D /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -191,6 +201,8 @@
 				A10000000000000000000007 /* HomeView.swift in Sources */,
 				A10000000000000000000008 /* PaywallView.swift in Sources */,
 				A1000000000000000000000A /* SyllableGuide.swift in Sources */,
+				A1000000000000000000000B /* SavedWordsView.swift in Sources */,
+				A1000000000000000000000C /* AppLinks.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -320,7 +332,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"EightWords/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = EightWords/Info.plist;
@@ -345,7 +356,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"EightWords/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = EightWords/Info.plist;

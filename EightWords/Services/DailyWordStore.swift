@@ -22,7 +22,7 @@ final class DailyWordStore: ObservableObject {
             rawValue: defaults.string(forKey: Keys.difficulty) ?? ""
         ) ?? .beginner
         self.savedWordIDs = Set(defaults.stringArray(forKey: Keys.savedWords) ?? [])
-        refreshForToday()
+        _ = refreshForToday()
     }
 
     var currentWord: WordEntry {
@@ -49,7 +49,7 @@ final class DailyWordStore: ObservableObject {
     }
 
     func beginIfNeeded() {
-        refreshForToday()
+        _ = refreshForToday()
         if viewedCount == 0 {
             viewedCount = 1
             save()
@@ -58,7 +58,14 @@ final class DailyWordStore: ObservableObject {
 
     @discardableResult
     func advance(isSubscribed: Bool) -> Bool {
-        refreshForToday()
+        let startedNewDay = refreshForToday()
+        if startedNewDay || viewedCount == 0 {
+            viewedCount = 1
+            sequenceIndex = 0
+            save()
+            return true
+        }
+
         guard isSubscribed || viewedCount < Self.freeDailyLimit else { return false }
         viewedCount += 1
         sequenceIndex += 1
@@ -85,18 +92,31 @@ final class DailyWordStore: ObservableObject {
         defaults.set(Array(savedWordIDs), forKey: Keys.savedWords)
     }
 
-    private func refreshForToday() {
+    func savedWords(for difficulty: Difficulty) -> [WordEntry] {
+        (WordLibrary.entries[difficulty] ?? [])
+            .filter { savedWordIDs.contains($0.id) }
+            .sorted { $0.word.localizedCaseInsensitiveCompare($1.word) == .orderedAscending }
+    }
+
+    var savedWordCount: Int {
+        savedWordIDs.count
+    }
+
+    @discardableResult
+    private func refreshForToday() -> Bool {
         let today = Self.dayKey(for: .now, calendar: calendar)
         let savedDay = defaults.string(forKey: Keys.day)
 
         if savedDay == today {
             viewedCount = defaults.integer(forKey: Keys.viewedCount)
             sequenceIndex = defaults.integer(forKey: Keys.sequenceIndex)
+            return false
         } else {
             viewedCount = 0
             sequenceIndex = 0
             defaults.set(today, forKey: Keys.day)
             save()
+            return true
         }
     }
 

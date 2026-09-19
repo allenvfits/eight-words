@@ -18,14 +18,17 @@ The Windows preview stores profiles on that computer only. The recommended cloud
 - Spoken pronunciation using the system voice
 - A StoreKit 2 monthly subscription flow for unlimited words
 - A clear unlimited mode with no daily cap for `$1.99/month`
-- Saved-word favorites and a Plus surprise-word explorer
+- Saved-word favorites with a dedicated review screen
 - Restore purchases and transaction verification
 - Dynamic Type, VoiceOver labels, reduced-motion handling, and iPad support
 - A local StoreKit testing configuration with a `$1.99/month` product
+- An Apple privacy manifest declaring local preferences use
+- Public privacy and support pages published from `docs/`
+- GitHub Actions checks for the iOS build, plists, app icon, and web JavaScript
 
 ## Run it
 
-1. Open `EightWords.xcodeproj` in Xcode 15 or newer on macOS.
+1. Open `EightWords.xcodeproj` in a current App Store-supported version of Xcode on macOS.
 2. Choose the **EightWords** scheme and an iPhone simulator.
 3. Build and run.
 
@@ -33,12 +36,15 @@ The shared scheme uses `EightWords.storekit`, so the paywall can be tested local
 
 ## Before App Store submission
 
-1. Change `com.eightwords.app` to a bundle ID registered to your Apple Developer account.
+1. Change `com.eightwords.app` to a unique bundle ID registered to your Apple Developer account.
 2. In App Store Connect, create a subscription group and an auto-renewable monthly subscription with product ID `com.eightwords.plus.monthly`.
 3. Set the US price to `$1.99`; Apple automatically handles local pricing and tax presentation.
-4. Replace the placeholder privacy link in `Views/PaywallView.swift` with your published privacy policy.
+4. Confirm that `https://allenvfits.github.io/eight-words/privacy/` and `/support/` are live.
 5. Add your development team under **Signing & Capabilities**.
-6. Create the app record, subscription review screenshot, App Privacy answers, and age rating.
+6. Expand the recurring content library or switch Plus to a one-time purchase so the paid product clearly delivers the value advertised to customers and App Review.
+7. Create the app record, subscription review screenshot, App Privacy answers, and age rating.
+
+The exact App Store Connect fields, review notes, and remaining owner-only steps are in [`APP-STORE-SUBMISSION.md`](APP-STORE-SUBMISSION.md).
 
 This build does not collect personal data, show advertising, or require an account. That keeps the experience appropriate for a broad audience. If you choose Apple's Kids Category, review the additional Kids Category rules before submitting.
 

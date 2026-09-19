@@ -62,12 +62,12 @@ struct PaywallView: View {
             }
             .accessibilityHidden(true)
 
-            Text("Unlimited words. No daily cap.")
+            Text(subscriptionManager.isSubscribed ? "Eight Words Plus is active." : "Unlimited words. No daily cap.")
                 .font(.system(.largeTitle, design: .rounded, weight: .black))
                 .multilineTextAlignment(.center)
                 .foregroundStyle(AppColors.ink)
 
-            Text("Learn as many words as you want with Eight Words Plus for \(priceText) per month.")
+            Text(heroDetail)
                 .font(.system(size: 16, weight: .medium, design: .rounded))
                 .multilineTextAlignment(.center)
                 .foregroundStyle(AppColors.muted)
@@ -79,7 +79,7 @@ struct PaywallView: View {
     private var benefits: some View {
         VStack(spacing: 12) {
             benefit(icon: "infinity", title: "No daily limit", detail: "Learn as many words as you like, every day")
-            benefit(icon: "slider.horizontal.3", title: "All three levels", detail: "Switch from Everyday to Curious anytime")
+            benefit(icon: "slider.horizontal.3", title: "Unlimited across every level", detail: "Keep browsing without the eight-word daily cap")
             benefit(icon: "speaker.wave.2.fill", title: "Hear every word", detail: "Clear spoken pronunciation is always included")
         }
     }
@@ -111,27 +111,39 @@ struct PaywallView: View {
 
     private var subscribeButton: some View {
         VStack(spacing: 10) {
-            Button {
-                Task { await subscriptionManager.purchase() }
-            } label: {
-                Group {
-                    if subscriptionManager.isLoading {
-                        ProgressView()
-                            .tint(.white)
-                    } else {
-                        Text("Start Plus — \(priceText) / month")
-                    }
+            if subscriptionManager.isSubscribed {
+                Link(destination: AppLinks.manageSubscriptions) {
+                    Text("Manage subscription")
+                        .font(.system(size: 17, weight: .black, design: .rounded))
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 58)
+                        .background(AppColors.ink, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
                 }
-                .font(.system(size: 17, weight: .black, design: .rounded))
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .frame(height: 58)
-                .background(AppColors.ink, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                .buttonStyle(PressButtonStyle())
+            } else {
+                Button {
+                    Task { await subscriptionManager.purchase() }
+                } label: {
+                    Group {
+                        if subscriptionManager.isLoading {
+                            ProgressView()
+                                .tint(.white)
+                        } else {
+                            Text(purchaseButtonTitle)
+                        }
+                    }
+                    .font(.system(size: 17, weight: .black, design: .rounded))
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 58)
+                    .background(AppColors.ink, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                }
+                .buttonStyle(PressButtonStyle())
+                .disabled(subscriptionManager.isLoading)
             }
-            .buttonStyle(PressButtonStyle())
-            .disabled(subscriptionManager.isLoading)
 
-            Text("Cancel anytime in Apple Account settings.")
+            Text(subscriptionManager.isSubscribed ? "Manage or cancel in Apple Account settings." : "Monthly subscription. Cancel anytime in Apple Account settings.")
                 .font(.system(size: 12, weight: .medium, design: .rounded))
                 .foregroundStyle(AppColors.muted)
         }
@@ -145,22 +157,36 @@ struct PaywallView: View {
             .font(.system(size: 14, weight: .bold, design: .rounded))
             .foregroundStyle(AppColors.ink)
 
-            Text("Payment is charged to your Apple Account. Subscription renews automatically unless canceled at least 24 hours before the current period ends.")
+            Text("Payment is charged to your Apple Account. The subscription renews monthly until canceled at least 24 hours before the current period ends.")
                 .font(.system(size: 10, weight: .medium, design: .rounded))
                 .foregroundStyle(AppColors.muted)
                 .multilineTextAlignment(.center)
 
             HStack(spacing: 18) {
-                Link("Privacy", destination: URL(string: "https://example.com/privacy")!)
-                Link("Terms", destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
+                Link("Privacy", destination: AppLinks.privacy)
+                Link("Terms", destination: AppLinks.terms)
+                Link("Support", destination: AppLinks.support)
             }
             .font(.system(size: 11, weight: .bold, design: .rounded))
             .foregroundStyle(AppColors.muted)
         }
     }
 
-    private var priceText: String {
-        subscriptionManager.monthlyProduct?.displayPrice ?? "$1.99"
+    private var heroDetail: String {
+        if subscriptionManager.isSubscribed {
+            return "Keep learning without the daily eight-word limit."
+        }
+        if let price = subscriptionManager.monthlyProduct?.displayPrice {
+            return "Learn as many words as you want for \(price) per month."
+        }
+        return "Learn as many words as you want with a monthly subscription."
+    }
+
+    private var purchaseButtonTitle: String {
+        if let price = subscriptionManager.monthlyProduct?.displayPrice {
+            return "Start Plus — \(price) / month"
+        }
+        return "Check App Store price"
     }
 }
 

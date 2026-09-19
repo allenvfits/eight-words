@@ -1,0 +1,42 @@
+name: iOS CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Show Xcode version
+        run: xcodebuild -version
+      - name: Validate privacy manifest and app plist
+        run: plutil -lint EightWords/Info.plist EightWords/PrivacyInfo.xcprivacy
+      - name: Validate opaque App Store icon
+        run: test "$(sips -g hasAlpha EightWords/Assets.xcassets/AppIcon.appiconset/AppIcon.png | awk '/hasAlpha/ {print $2}')" = "no"
+      - name: Build for iOS Simulator
+        run: >-
+          xcodebuild
+          -project EightWords.xcodeproj
+          -scheme EightWords
+          -configuration Debug
+          -destination 'generic/platform=iOS Simulator'
+          CODE_SIGNING_ALLOWED=NO
+          clean build
+
+  validate-web-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check JavaScript syntax
+        run: node --check web/app.js
