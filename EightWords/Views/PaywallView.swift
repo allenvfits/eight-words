@@ -72,6 +72,16 @@ struct PaywallView: View {
                 .multilineTextAlignment(.center)
                 .foregroundStyle(AppColors.muted)
                 .fixedSize(horizontal: false, vertical: true)
+
+            if let productName = subscriptionManager.monthlyProduct?.displayName {
+                Text(productName)
+                    .font(.system(size: 14, weight: .bold, design: .rounded))
+                    .foregroundStyle(AppColors.ink)
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 8)
+                    .background(.white.opacity(0.82), in: Capsule())
+                    .accessibilityLabel("Plan: \(productName)")
+            }
         }
         .padding(.top, 10)
     }
@@ -123,7 +133,13 @@ struct PaywallView: View {
                 .buttonStyle(PressButtonStyle())
             } else {
                 Button {
-                    Task { await subscriptionManager.purchase() }
+                    Task {
+                        if subscriptionManager.monthlyProduct == nil {
+                            await subscriptionManager.loadProducts()
+                        } else {
+                            await subscriptionManager.purchase()
+                        }
+                    }
                 } label: {
                     Group {
                         if subscriptionManager.isLoading {
@@ -156,6 +172,8 @@ struct PaywallView: View {
             }
             .font(.system(size: 14, weight: .bold, design: .rounded))
             .foregroundStyle(AppColors.ink)
+            .disabled(subscriptionManager.isLoading)
+            .opacity(subscriptionManager.isLoading ? 0.55 : 1)
 
             Text("Payment is charged to your Apple Account. The subscription renews monthly until canceled at least 24 hours before the current period ends.")
                 .font(.system(size: 10, weight: .medium, design: .rounded))

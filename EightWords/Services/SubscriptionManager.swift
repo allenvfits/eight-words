@@ -45,12 +45,8 @@ final class SubscriptionManager: ObservableObject {
 
     func purchase() async {
         errorMessage = nil
-        if monthlyProduct == nil {
-            await loadProducts()
-        }
-
         guard let monthlyProduct else {
-            errorMessage = "Eight Words Plus isn't available right now."
+            errorMessage = "Check the App Store price before starting your subscription."
             return
         }
 
@@ -102,6 +98,9 @@ final class SubscriptionManager: ObservableObject {
         }
 
         isSubscribed = hasActiveSubscription
+        if hasActiveSubscription {
+            errorMessage = nil
+        }
     }
 
     private func observeTransactions() -> Task<Void, Never> {

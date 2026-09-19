@@ -24,6 +24,7 @@ Prepare Eight Words for TestFlight and App Store review, add a secure Supabase-b
 - Added GitHub Actions checks for metadata, icon dimensions/alpha, privileged-key scanning, Debug Simulator build, unsigned Release device build, unit tests, and browser-preview JavaScript syntax.
 - Expanded the iOS test suite to cover the word catalog, stable IDs, cache coding, Supabase request/decoding behavior, HTTPS legal links, daily rotation, the free-word limit/Plus bypass, saved-word persistence, and midnight rollover.
 - Added App Store metadata, review notes, signing/upload steps, and TestFlight instructions to `APP-STORE-SUBMISSION.md`.
+- Hardened the Plus paywall so checking the App Store price never starts a purchase, the localized product name is visible before purchase, Restore is disabled during StoreKit operations, and a granted transaction clears any earlier pending-approval message.
 
 ## Latest verification
 
@@ -44,9 +45,6 @@ Do not guess or silently resolve these choices:
 
 ## Known App Review follow-ups
 
-- When StoreKit product data is unavailable, the button says **Check App Store price**, but the current action can load the product and immediately open the purchase confirmation. Change this to show the localized product first and require a separate purchase tap.
-- Display `Product.displayName` explicitly on the paywall, while retaining the duration, localized renewal price, benefits, restore, Terms, and Privacy disclosures already present.
-- Disable Restore while another StoreKit operation is in progress and clear the pending-purchase notice if a later transaction update grants access.
 - Add StoreKitTest coverage or complete the equivalent Sandbox/TestFlight matrix for purchase, restore, pending approval, renewal, cancellation, expiration, and revocation.
 
 ## Important configuration state
