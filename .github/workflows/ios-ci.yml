@@ -29,6 +29,17 @@ jobs:
           -destination 'generic/platform=iOS Simulator'
           CODE_SIGNING_ALLOWED=NO
           clean build
+      - name: Run unit tests
+        run: |
+          set -euo pipefail
+          simulator_id="$(xcrun simctl list devices available | awk -F '[()]' '/iPhone/ {print $2; exit}')"
+          test -n "$simulator_id"
+          xcodebuild test \
+            -project EightWords.xcodeproj \
+            -scheme EightWords \
+            -configuration Debug \
+            -destination "platform=iOS Simulator,id=$simulator_id" \
+            CODE_SIGNING_ALLOWED=NO
 
   validate-web-preview:
     runs-on: ubuntu-latest

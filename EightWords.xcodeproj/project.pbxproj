@@ -20,7 +20,20 @@
 		A1000000000000000000000B /* SavedWordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000E /* SavedWordsView.swift */; };
 		A1000000000000000000000C /* AppLinks.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000F /* AppLinks.swift */; };
 		A1000000000000000000000D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000010 /* PrivacyInfo.xcprivacy */; };
+		A1000000000000000000000E /* SupabaseConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000011 /* SupabaseConfiguration.swift */; };
+		A1000000000000000000000F /* SupabaseWordRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000012 /* SupabaseWordRepository.swift */; };
+		B10000000000000000000001 /* WordCatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000000000000000000001 /* WordCatalogTests.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BB0000000000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A80000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A50000000000000000000001;
+			remoteInfo = EightWords;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		A20000000000000000000001 /* EightWordsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EightWordsApp.swift; sourceTree = "<group>"; };
@@ -39,10 +52,21 @@
 		A2000000000000000000000E /* SavedWordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedWordsView.swift; sourceTree = "<group>"; };
 		A2000000000000000000000F /* AppLinks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLinks.swift; sourceTree = "<group>"; };
 		A20000000000000000000010 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		A20000000000000000000011 /* SupabaseConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseConfiguration.swift; sourceTree = "<group>"; };
+		A20000000000000000000012 /* SupabaseWordRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseWordRepository.swift; sourceTree = "<group>"; };
+		B20000000000000000000001 /* WordCatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordCatalogTests.swift; sourceTree = "<group>"; };
+		B20000000000000000000002 /* EightWordsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EightWordsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		A30000000000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B30000000000000000000001 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -56,6 +80,7 @@
 			isa = PBXGroup;
 			children = (
 				A40000000000000000000002 /* EightWords */,
+				B40000000000000000000001 /* EightWordsTests */,
 				A40000000000000000000007 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -97,6 +122,8 @@
 			children = (
 				A2000000000000000000000F /* AppLinks.swift */,
 				A20000000000000000000004 /* DailyWordStore.swift */,
+				A20000000000000000000011 /* SupabaseConfiguration.swift */,
+				A20000000000000000000012 /* SupabaseWordRepository.swift */,
 				A20000000000000000000005 /* SubscriptionManager.swift */,
 				A20000000000000000000006 /* SpeechService.swift */,
 				A2000000000000000000000D /* SyllableGuide.swift */,
@@ -118,8 +145,17 @@
 			isa = PBXGroup;
 			children = (
 				A2000000000000000000000C /* EightWords.app */,
+				B20000000000000000000002 /* EightWordsTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		B40000000000000000000001 /* EightWordsTests */ = {
+			isa = PBXGroup;
+			children = (
+				B20000000000000000000001 /* WordCatalogTests.swift */,
+			);
+			path = EightWordsTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -142,6 +178,24 @@
 			productReference = A2000000000000000000000C /* EightWords.app */;
 			productType = "com.apple.product-type.application";
 		};
+		B50000000000000000000001 /* EightWordsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B90000000000000000000001 /* Build configuration list for PBXNativeTarget "EightWordsTests" */;
+			buildPhases = (
+				B60000000000000000000001 /* Sources */,
+				B30000000000000000000001 /* Frameworks */,
+				B70000000000000000000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B80000000000000000000001 /* PBXTargetDependency */,
+			);
+			name = EightWordsTests;
+			productName = EightWordsTests;
+			productReference = B20000000000000000000002 /* EightWordsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -154,6 +208,10 @@
 				TargetAttributes = {
 					A50000000000000000000001 = {
 						CreatedOnToolsVersion = 16.0;
+					};
+					B50000000000000000000001 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = A50000000000000000000001;
 					};
 				};
 			};
@@ -171,6 +229,7 @@
 			projectRoot = "";
 			targets = (
 				A50000000000000000000001 /* EightWords */,
+				B50000000000000000000001 /* EightWordsTests */,
 			);
 		};
 /* End PBXProject section */
@@ -182,6 +241,13 @@
 			files = (
 				A10000000000000000000009 /* Assets.xcassets in Resources */,
 				A1000000000000000000000D /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B70000000000000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,10 +269,28 @@
 				A1000000000000000000000A /* SyllableGuide.swift in Sources */,
 				A1000000000000000000000B /* SavedWordsView.swift in Sources */,
 				A1000000000000000000000C /* AppLinks.swift in Sources */,
+				A1000000000000000000000E /* SupabaseConfiguration.swift in Sources */,
+				A1000000000000000000000F /* SupabaseWordRepository.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B60000000000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B10000000000000000000001 /* WordCatalogTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B80000000000000000000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A50000000000000000000001 /* EightWords */;
+			targetProxy = BB0000000000000000000001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		AA0000000000000000000001 /* Debug */ = {
@@ -342,6 +426,8 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.eightwords.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPABASE_PROJECT_URL = "";
+				SUPABASE_PUBLISHABLE_KEY = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -366,11 +452,51 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.eightwords.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPABASE_PROJECT_URL = "";
+				SUPABASE_PUBLISHABLE_KEY = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		BA0000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.eightwords.app.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EightWords.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/EightWords";
+			};
+			name = Debug;
+		};
+		BA0000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.eightwords.app.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EightWords.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/EightWords";
 			};
 			name = Release;
 		};
@@ -391,6 +517,15 @@
 			buildConfigurations = (
 				AA0000000000000000000003 /* Debug */,
 				AA0000000000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B90000000000000000000001 /* Build configuration list for PBXNativeTarget "EightWordsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BA0000000000000000000001 /* Debug */,
+				BA0000000000000000000002 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

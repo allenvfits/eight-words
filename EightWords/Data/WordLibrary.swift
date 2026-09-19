@@ -70,8 +70,12 @@ enum WordLibrary {
         ]
     ]
 
-    static func words(for difficulty: Difficulty, on date: Date = .now) -> [WordEntry] {
-        guard let source = entries[difficulty], !source.isEmpty else { return [] }
+    static func words(
+        for difficulty: Difficulty,
+        on date: Date = .now,
+        entries catalog: [Difficulty: [WordEntry]] = entries
+    ) -> [WordEntry] {
+        guard let source = catalog[difficulty], !source.isEmpty else { return [] }
         let day = Calendar.current.ordinality(of: .day, in: .era, for: date) ?? 0
         let levelOffset = Difficulty.allCases.firstIndex(of: difficulty) ?? 0
         let start = (day * 7 + levelOffset * 5) % source.count

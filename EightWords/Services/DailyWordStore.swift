@@ -11,13 +11,23 @@ final class DailyWordStore: ObservableObject {
     @Published private(set) var viewedCount: Int = 0
     @Published private(set) var sequenceIndex: Int = 0
     @Published private(set) var savedWordIDs: Set<String> = []
+    @Published private(set) var catalog: [Difficulty: [WordEntry]] = WordLibrary.entries
 
     private let defaults: UserDefaults
     private let calendar: Calendar
+    private let now: () -> Date
+    private let wordRepository: SupabaseWordRepository
 
-    init(defaults: UserDefaults = .standard, calendar: Calendar = .current) {
+    init(
+        defaults: UserDefaults = .standard,
+        calendar: Calendar = .current,
+        now: @escaping () -> Date = { .now },
+        wordRepository: SupabaseWordRepository = SupabaseWordRepository()
+    ) {
         self.defaults = defaults
         self.calendar = calendar
+        self.now = now
+        self.wordRepository = wordRepository
         self.selectedDifficulty = Difficulty(
             rawValue: defaults.string(forKey: Keys.difficulty) ?? ""
         ) ?? .beginner
@@ -26,7 +36,7 @@ final class DailyWordStore: ObservableObject {
     }
 
     var currentWord: WordEntry {
-        let words = WordLibrary.words(for: selectedDifficulty)
+        let words = WordLibrary.words(for: selectedDifficulty, entries: catalog)
         guard !words.isEmpty else {
             return WordEntry(
                 word: "wonder",
@@ -52,6 +62,24 @@ final class DailyWordStore: ObservableObject {
         _ = refreshForToday()
         if viewedCount == 0 {
             viewedCount = 1
+            save()
+        }
+    }
+
+    func refreshCatalog() async {
+        guard let newCatalog = await wordRepository.loadCatalog() else { return }
+
+        let previousCatalog = catalog
+        let visibleWordID = viewedCount > 0 ? currentWord.id : nil
+        catalog = newCatalog
+
+        if let visibleWordID {
+            let newSequence = WordLibrary.words(for: selectedDifficulty, entries: newCatalog)
+            guard let matchingIndex = newSequence.firstIndex(where: { $0.id == visibleWordID }) else {
+                catalog = previousCatalog
+                return
+            }
+            sequenceIndex = matchingIndex
             save()
         }
     }
@@ -93,7 +121,7 @@ final class DailyWordStore: ObservableObject {
     }
 
     func savedWords(for difficulty: Difficulty) -> [WordEntry] {
-        (WordLibrary.entries[difficulty] ?? [])
+        (catalog[difficulty] ?? [])
             .filter { savedWordIDs.contains($0.id) }
             .sorted { $0.word.localizedCaseInsensitiveCompare($1.word) == .orderedAscending }
     }
@@ -104,7 +132,7 @@ final class DailyWordStore: ObservableObject {
 
     @discardableResult
     private func refreshForToday() -> Bool {
-        let today = Self.dayKey(for: .now, calendar: calendar)
+        let today = Self.dayKey(for: now(), calendar: calendar)
         let savedDay = defaults.string(forKey: Keys.day)
 
         if savedDay == today {

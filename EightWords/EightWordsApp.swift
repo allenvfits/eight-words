@@ -12,7 +12,9 @@ struct EightWordsApp: App {
                 .environmentObject(subscriptionManager)
                 .preferredColorScheme(.light)
                 .task {
-                    await subscriptionManager.prepare()
+                    async let subscriptionPreparation: Void = subscriptionManager.prepare()
+                    async let catalogRefresh: Void = dailyStore.refreshCatalog()
+                    _ = await (subscriptionPreparation, catalogRefresh)
                 }
         }
     }

@@ -8,6 +8,7 @@
 - StoreKit 2 purchase, restore, verified transaction, and entitlement handling
 - Opaque 1024 × 1024 App Store icon
 - Privacy manifest for on-device `UserDefaults` use
+- Supabase-backed read-only vocabulary updates with bundled and cached offline fallbacks
 - Public privacy and support pages in `docs/`
 - GitHub Actions for unsigned iOS Simulator builds and GitHub Pages deployment
 
@@ -40,7 +41,7 @@ Select the correct Apple Developer team in Xcode under **Signing & Capabilities*
 - **Privacy Policy URL:** `https://allenvfits.github.io/eight-words/privacy/`
 - **Support URL:** `https://allenvfits.github.io/eight-words/support/`
 - **Marketing URL:** `https://allenvfits.github.io/eight-words/`
-- **App privacy:** The current build does not transmit user data off device. Confirm this answer again if analytics, accounts, crash reporting, or a remote dictionary are added.
+- **App privacy:** Learning progress and saved words stay on-device. The production build contacts Supabase to download vocabulary, and Supabase may process standard network request metadata. Complete App Privacy answers against the final Supabase configuration and data-retention settings before submission.
 
 ### Promotional text
 
@@ -58,7 +59,7 @@ Eight Words gives you eight free words each day with no account, no ads, and no 
 
 ## Review notes draft
 
-Eight Words does not require an account and does not collect or transmit personal data. Daily progress, selected difficulty, and saved words remain on the device. Tap through eight words to display the Plus purchase screen. Use the Restore Purchases button to test entitlement restoration. The app uses Apple StoreKit for all digital purchases.
+Eight Words does not require an account. Daily progress, selected difficulty, and saved words remain on the device. The app makes read-only requests to Supabase for published vocabulary and never sends learning activity in those requests. Tap through eight words to display the Plus purchase screen. Use the Restore Purchases button to test entitlement restoration. The app uses Apple StoreKit for all digital purchases.
 
 Update these notes if the paid product model changes.
 
@@ -73,3 +74,14 @@ Update these notes if the paid product model changes.
 7. Archive a Release build on macOS, run **Validate App**, and upload it.
 8. Add iPhone and iPad screenshots, privacy answers, age rating, contact details, and review notes.
 9. Test the uploaded build with TestFlight before submitting it for App Review.
+
+## Share the beta before App Store release
+
+1. Create the app record and final bundle ID in App Store Connect.
+2. In Xcode, select the Apple Developer team, archive a Release build, and choose **Distribute App > App Store Connect > Upload**.
+3. After Apple finishes processing the build, open the app's **TestFlight** tab.
+4. For your own team, create an Internal Testing group and add App Store Connect users. Internal testing is the fastest path.
+5. For friends or customers, first create an internal group, then create an External Testing group, add the build, complete **What to Test** and beta review contact information, and submit the build for TestFlight App Review.
+6. After beta approval, create a public invitation link (with a tester limit) or invite people by email. Testers install Apple's TestFlight app and open the invitation.
+
+The app is not publicly listed in the App Store during TestFlight testing. Apple currently allows up to 100 internal testers and up to 10,000 external testers; each beta build is available for 90 days.

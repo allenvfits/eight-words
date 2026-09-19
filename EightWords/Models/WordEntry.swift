@@ -1,7 +1,7 @@
 import Foundation
 import SwiftUI
 
-enum Difficulty: String, CaseIterable, Codable, Identifiable {
+enum Difficulty: String, CaseIterable, Codable, Identifiable, Sendable {
     case beginner
     case intermediate
     case advanced
@@ -41,7 +41,8 @@ enum Difficulty: String, CaseIterable, Codable, Identifiable {
     }
 }
 
-struct WordEntry: Identifiable, Hashable {
+struct WordEntry: Identifiable, Hashable, Codable, Sendable {
+    let id: String
     let word: String
     let pronunciation: String
     let partOfSpeech: String
@@ -49,5 +50,21 @@ struct WordEntry: Identifiable, Hashable {
     let example: String
     let difficulty: Difficulty
 
-    var id: String { "\(difficulty.rawValue)-\(word.lowercased())" }
+    init(
+        id: String? = nil,
+        word: String,
+        pronunciation: String,
+        partOfSpeech: String,
+        definition: String,
+        example: String,
+        difficulty: Difficulty
+    ) {
+        self.id = id ?? "\(difficulty.rawValue)-\(word.lowercased())"
+        self.word = word
+        self.pronunciation = pronunciation
+        self.partOfSpeech = partOfSpeech
+        self.definition = definition
+        self.example = example
+        self.difficulty = difficulty
+    }
 }
