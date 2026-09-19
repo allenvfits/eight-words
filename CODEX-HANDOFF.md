@@ -25,14 +25,12 @@ Prepare Eight Words for TestFlight and App Store review, add a secure Supabase-b
 - Expanded the iOS test suite to cover the word catalog, stable IDs, cache coding, Supabase request/decoding behavior, HTTPS legal links, daily rotation, the free-word limit/Plus bypass, saved-word persistence, and midnight rollover.
 - Added App Store metadata, review notes, signing/upload steps, and TestFlight instructions to `APP-STORE-SUBMISSION.md`.
 
-## Previously verified
+## Latest verification
 
-- GitHub Actions run `35437196481` passed the real Xcode 26.6 Simulator build, the original five unit tests, and the web check.
-- GitHub Pages run `35437196466` passed, and the public privacy/support URLs were opened and verified.
+- GitHub Actions run `35438248250` passed on commit `42a03bb`: metadata/StoreKit validation, privacy manifest, icon dimensions and alpha, privileged-key scan, Xcode 26.6 Debug Simulator build, unsigned optimized Release device build, all nine unit tests, and the web JavaScript check.
+- GitHub Pages run `35438191375` passed after the privacy-policy update, and the public privacy/support URLs are deployed.
 - The seed file contains the same 60 unique stable IDs as the bundled catalog.
 - The app continues to work from bundled data when Supabase is absent or unreachable.
-
-The checkpoint that adds the Release-device gate, expanded tests, and detailed privacy disclosure still needs its own GitHub Actions run to pass after upload.
 
 ## Waiting on the owner
 
@@ -56,12 +54,11 @@ Do not guess or silently resolve these choices:
 
 After the owner decisions and live Supabase setup:
 
-1. Confirm the latest GitHub Actions run passes, including the unsigned Release device build and all nine unit tests.
-2. Verify live Supabase rows and RLS with the publishable key, then confirm the app still falls back correctly while offline.
-3. Create the matching App Store Connect app and in-app purchase product.
-4. Enter and publish the App Privacy answers from `APP-PRIVACY-DISCLOSURE.md`; the Xcode privacy manifest alone does not create the App Store privacy label.
-5. Build a signed Release archive on a Mac, run Xcode **Validate App**, and upload it.
-6. Test a fresh install, offline launch, word rollover, purchase, restore, expiration/revocation, privacy/support links, VoiceOver, large Dynamic Type, iPhone, and iPad in TestFlight.
-7. Use an internal TestFlight group first. For friends, submit the build for external TestFlight review, then share a public invitation link or email invitations.
+1. Verify live Supabase rows and RLS with the publishable key, then confirm the app still falls back correctly while offline.
+2. Create the matching App Store Connect app and in-app purchase product.
+3. Enter and publish the App Privacy answers from `APP-PRIVACY-DISCLOSURE.md`; the Xcode privacy manifest alone does not create the App Store privacy label.
+4. Build a signed Release archive on a Mac, run Xcode **Validate App**, and upload it.
+5. Test a fresh install, offline launch, word rollover, purchase, restore, expiration/revocation, privacy/support links, VoiceOver, large Dynamic Type, iPhone, and iPad in TestFlight.
+6. Use an internal TestFlight group first. For friends, submit the build for external TestFlight review, then share a public invitation link or email invitations.
 
 Only Apple can approve the app. Passing CI establishes build/test readiness, not App Store approval.
