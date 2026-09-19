@@ -41,7 +41,7 @@ Select the correct Apple Developer team in Xcode under **Signing & Capabilities*
 - **Privacy Policy URL:** `https://allenvfits.github.io/eight-words/privacy/`
 - **Support URL:** `https://allenvfits.github.io/eight-words/support/`
 - **Marketing URL:** `https://allenvfits.github.io/eight-words/`
-- **App privacy:** Learning progress and saved words stay on-device. The production build contacts Supabase to download vocabulary, and Supabase may process standard network request metadata. Complete App Privacy answers against the final Supabase configuration and data-retention settings before submission.
+- **App privacy:** Learning progress and saved words stay on-device. The production build contacts Supabase to download vocabulary, whose retained gateway logs require App Store privacy disclosures. Use the exact answer sheet in [`APP-PRIVACY-DISCLOSURE.md`](APP-PRIVACY-DISCLOSURE.md), then verify it against the live project's logging settings before publishing the label.
 
 ### Promotional text
 
@@ -74,6 +74,10 @@ Update these notes if the paid product model changes.
 7. Archive a Release build on macOS, run **Validate App**, and upload it.
 8. Add iPhone and iPad screenshots, privacy answers, age rating, contact details, and review notes.
 9. Test the uploaded build with TestFlight before submitting it for App Review.
+
+## App privacy label gate
+
+The Xcode privacy manifest does not generate the App Store privacy label. An Account Holder, Admin, or App Manager must separately publish the answers under **App Store Connect > App > App Privacy**. For the intended Supabase build, the prepared answer sheet conservatively declares Coarse Location, Product Interaction, and Other Diagnostic Data for App Functionality, linked to the user, and not used for tracking. If Supabase remains disabled in the uploaded build, use the offline-only profile instead.
 
 ## Share the beta before App Store release
 

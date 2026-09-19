@@ -23,7 +23,7 @@ The Windows preview stores profiles on that computer only. The recommended cloud
 - Restore purchases and transaction verification
 - Dynamic Type, VoiceOver labels, reduced-motion handling, and iPad support
 - A local StoreKit testing configuration with a `$1.99/month` product
-- An Apple privacy manifest declaring local preferences use
+- An Apple privacy manifest declaring local preferences use and the intended Supabase request metadata disclosures
 - Public privacy and support pages published from `docs/`
 - GitHub Actions checks for the iOS build, plists, app icon, and web JavaScript
 
@@ -46,6 +46,8 @@ The app works from its bundled 60-word catalog when Supabase is unavailable or n
 5. Add your development team under **Signing & Capabilities**.
 6. Expand the recurring content library or switch Plus to a one-time purchase so the paid product clearly delivers the value advertised to customers and App Review.
 7. Create the app record, subscription review screenshot, App Privacy answers, and age rating. Account for Supabase's processing of vocabulary-download request metadata.
+
+The repository includes a submission-ready [App Store privacy answer sheet](APP-PRIVACY-DISCLOSURE.md). The App Store privacy label is entered and published separately from the Xcode privacy manifest.
 
 The exact App Store Connect fields, review notes, and remaining owner-only steps are in [`APP-STORE-SUBMISSION.md`](APP-STORE-SUBMISSION.md).
 
