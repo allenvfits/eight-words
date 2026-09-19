@@ -17,11 +17,10 @@ jobs:
       - name: Show Xcode version
         run: xcodebuild -version
       - name: Validate app metadata files
-        run: >-
-          plutil -lint
-          EightWords/Info.plist
-          EightWords/PrivacyInfo.xcprivacy
-          EightWords/EightWords.storekit
+        run: |
+          set -euo pipefail
+          plutil -lint EightWords/Info.plist EightWords/PrivacyInfo.xcprivacy
+          python3 -m json.tool EightWords/EightWords.storekit > /dev/null
       - name: Validate opaque App Store icon
         run: |
           set -euo pipefail
