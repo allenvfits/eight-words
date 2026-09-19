@@ -97,19 +97,21 @@ final class LearningProfileStore: ObservableObject {
         self.calendar = calendar
         self.now = now
 
+        let restoredProfiles: [LearnerProfile]
         if let data = defaults.data(forKey: Keys.profiles),
            let restored = try? JSONDecoder().decode([LearnerProfile].self, from: data),
            !restored.isEmpty {
-            profiles = restored
+            restoredProfiles = restored
         } else {
-            profiles = [.new(name: "Learner")]
+            restoredProfiles = [.new(name: "Learner")]
         }
+        profiles = restoredProfiles
 
         if let savedActiveID = defaults.string(forKey: Keys.activeProfile),
-           profiles.contains(where: { $0.id == savedActiveID }) {
+           restoredProfiles.contains(where: { $0.id == savedActiveID }) {
             activeProfileID = savedActiveID
         } else {
-            activeProfileID = profiles[0].id
+            activeProfileID = restoredProfiles[0].id
         }
     }
 
