@@ -4,7 +4,7 @@ import StoreKit
 
 @MainActor
 final class SubscriptionManager: ObservableObject {
-    static let monthlyProductID = "com.eightwords.plus.monthly"
+    static let monthlyProductID = "com.allenvfits.eightwords.plus.monthly"
 
     @Published private(set) var monthlyProduct: Product?
     @Published private(set) var isSubscribed = false

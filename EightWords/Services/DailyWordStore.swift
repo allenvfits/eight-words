@@ -6,7 +6,7 @@ final class DailyWordStore: ObservableObject {
     static let freeDailyLimit = 8
 
     @Published var selectedDifficulty: Difficulty {
-        didSet { defaults.set(selectedDifficulty.rawValue, forKey: Keys.difficulty) }
+        didSet { defaults.set(selectedDifficulty.rawValue, forKey: key(Keys.difficulty)) }
     }
     @Published private(set) var viewedCount: Int = 0
     @Published private(set) var sequenceIndex: Int = 0
@@ -17,6 +17,7 @@ final class DailyWordStore: ObservableObject {
     private let calendar: Calendar
     private let now: () -> Date
     private let wordRepository: SupabaseWordRepository
+    private var profileID = "default"
 
     init(
         defaults: UserDefaults = .standard,
@@ -29,10 +30,29 @@ final class DailyWordStore: ObservableObject {
         self.now = now
         self.wordRepository = wordRepository
         self.selectedDifficulty = Difficulty(
-            rawValue: defaults.string(forKey: Keys.difficulty) ?? ""
+            rawValue: defaults.string(forKey: "default.\(Keys.difficulty)")
+                ?? defaults.string(forKey: Keys.difficulty)
+                ?? ""
         ) ?? .beginner
-        self.savedWordIDs = Set(defaults.stringArray(forKey: Keys.savedWords) ?? [])
+        self.savedWordIDs = Set(
+            defaults.stringArray(forKey: "default.\(Keys.savedWords)")
+                ?? defaults.stringArray(forKey: Keys.savedWords)
+                ?? []
+        )
         _ = refreshForToday()
+    }
+
+    func activateProfile(_ id: String) {
+        guard !id.isEmpty, profileID != id else { return }
+        profileID = id
+        selectedDifficulty = Difficulty(
+            rawValue: defaults.string(forKey: key(Keys.difficulty)) ?? ""
+        ) ?? .beginner
+        savedWordIDs = Set(defaults.stringArray(forKey: key(Keys.savedWords)) ?? [])
+        viewedCount = 0
+        sequenceIndex = 0
+        _ = refreshForToday()
+        beginIfNeeded()
     }
 
     var currentWord: WordEntry {
@@ -71,10 +91,11 @@ final class DailyWordStore: ObservableObject {
 
         let previousCatalog = catalog
         let visibleWordID = viewedCount > 0 ? currentWord.id : nil
-        catalog = newCatalog
+        let mergedCatalog = WordLibrary.merging(overrides: newCatalog)
+        catalog = mergedCatalog
 
         if let visibleWordID {
-            let newSequence = WordLibrary.words(for: selectedDifficulty, entries: newCatalog)
+            let newSequence = WordLibrary.words(for: selectedDifficulty, entries: mergedCatalog)
             guard let matchingIndex = newSequence.firstIndex(where: { $0.id == visibleWordID }) else {
                 catalog = previousCatalog
                 return
@@ -117,7 +138,7 @@ final class DailyWordStore: ObservableObject {
         } else {
             savedWordIDs.insert(word.id)
         }
-        defaults.set(Array(savedWordIDs), forKey: Keys.savedWords)
+        defaults.set(Array(savedWordIDs), forKey: key(Keys.savedWords))
     }
 
     func savedWords(for difficulty: Difficulty) -> [WordEntry] {
@@ -133,24 +154,28 @@ final class DailyWordStore: ObservableObject {
     @discardableResult
     private func refreshForToday() -> Bool {
         let today = Self.dayKey(for: now(), calendar: calendar)
-        let savedDay = defaults.string(forKey: Keys.day)
+        let savedDay = defaults.string(forKey: key(Keys.day))
 
         if savedDay == today {
-            viewedCount = defaults.integer(forKey: Keys.viewedCount)
-            sequenceIndex = defaults.integer(forKey: Keys.sequenceIndex)
+            viewedCount = defaults.integer(forKey: key(Keys.viewedCount))
+            sequenceIndex = defaults.integer(forKey: key(Keys.sequenceIndex))
             return false
         } else {
             viewedCount = 0
             sequenceIndex = 0
-            defaults.set(today, forKey: Keys.day)
+            defaults.set(today, forKey: key(Keys.day))
             save()
             return true
         }
     }
 
     private func save() {
-        defaults.set(viewedCount, forKey: Keys.viewedCount)
-        defaults.set(sequenceIndex, forKey: Keys.sequenceIndex)
+        defaults.set(viewedCount, forKey: key(Keys.viewedCount))
+        defaults.set(sequenceIndex, forKey: key(Keys.sequenceIndex))
+    }
+
+    private func key(_ base: String) -> String {
+        "\(profileID).\(base)"
     }
 
     private static func dayKey(for date: Date, calendar: Calendar) -> String {

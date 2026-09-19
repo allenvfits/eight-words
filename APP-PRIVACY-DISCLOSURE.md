@@ -1,8 +1,12 @@
 # Eight Words — App Store Privacy Answers
 
-Use the profile that matches the exact build uploaded to App Store Connect. The intended production build contacts Supabase, so its retained API gateway logs must be included even though Eight Words has no account, advertising, or analytics SDK.
+Use the profile that matches the exact build uploaded to App Store Connect. The current release build is offline-only: it uses the bundled catalog and stores learner data locally on the device.
 
-## App Store Connect answers for the Supabase build
+## App Store Connect answers for the current offline release
+
+Answer **No, we do not collect data from this app**. The checked-in `PrivacyInfo.xcprivacy` has an empty `NSPrivacyCollectedDataTypes` array and declares only the required-reason API used for local preferences.
+
+## Answers for a future Supabase-enabled build
 
 On **App Privacy**, answer **Yes, we collect data from this app**, then add these data types:
 
@@ -23,25 +27,23 @@ For every listed data type:
 
 ## Data that does not need to be added
 
-- Selected difficulty, daily progress, and saved words stay in `UserDefaults` on the device.
+- Learner profiles, selected difficulty, daily progress, learned and saved words, quiz/test activity, points, streaks, and rewards stay in `UserDefaults` on the device.
 - The cached vocabulary catalog stays in Application Support on the device.
 - Spoken pronunciation uses Apple's on-device speech API.
 - Apple processes payment details and StoreKit entitlements; Eight Words never receives payment-card data.
 - The app does not request contacts, photos, microphone, camera, health, precise GPS location, or an advertising identifier.
 - The app has no ads, third-party analytics SDK, cross-app tracking, or data broker sharing, so it does not need an App Tracking Transparency prompt.
 
-## If the submitted build is offline-only
-
-If both Supabase build settings are empty and the uploaded build uses only its bundled catalog, answer **No, we do not collect data from this app** and restore `NSPrivacyCollectedDataTypes` in `PrivacyInfo.xcprivacy` to an empty array before archiving. Change both the manifest and the App Store Connect answer before enabling Supabase in a later version.
+Do not use the Supabase answers for the current release. Before enabling Supabase in a later version, update both the privacy manifest and App Store Connect disclosures to match the production service.
 
 ## App Store Connect entry steps
 
 1. Create the app record using the final registered bundle ID.
 2. Open **App Privacy** and add `https://allenvfits.github.io/eight-words/privacy/` as the Privacy Policy URL.
-3. Click **Get Started**, choose the Supabase or offline-only profile above, and complete every selected data type.
+3. Click **Get Started**, choose **No, we do not collect data from this app**, and publish the answer.
 4. Review the Product Page Preview, click **Publish**, and keep the answers current when the data flow changes.
 
-An Account Holder, Admin, or App Manager must publish these answers. Before submission, inspect the live Supabase project's API gateway logging and retention once more; update this sheet and App Store Connect if the configured service differs.
+An Account Holder, Admin, or App Manager must publish these answers. If a network backend is enabled before submission, stop and reassess the declarations first.
 
 ## Primary references
 

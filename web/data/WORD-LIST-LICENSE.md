@@ -1,3 +1,5 @@
-Data files are derived from the *Google Web Trillion Word Corpus*, as described by [Thorsten Brants and Alex Franz](http://googleresearch.blogspot.com/2006/08/all-our-n-gram-are-belong-to-you.html), and distributed by the [Linguistic Data Consortium](http://www.ldc.upenn.edu/Catalog/CatalogEntry.jsp?catalogId=LDC2006T13). Subsets of this corpus distributed by [Peter Novig](http://norvig.com/ngrams/). Corpus editing and cleanup by Josh Kaufman.
+The browser vocabulary catalog is generated from the same filtered Open English WordNet 2025 subset bundled with the native app.
 
-Educational and personal/research use of this data is permitted under the LDC license, Norvig's MIT license for his contributions, and US fair use doctrine. I do not recommend using this data for commercial purposes without licensing it from the Linguistic Data Consortium.
+Open English WordNet is created by the Open English WordNet community, derived from Princeton WordNet, and licensed under the [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/). Source downloads are available at <https://en-word.net/downloads>.
+
+Eight Words adds difficulty groupings, stable identifiers, formatting, safety filters, and original curated entries. No endorsement by the Open English WordNet contributors or their institutions is implied. See the repository root `THIRD-PARTY-NOTICES.md` for the citation and source archive checksum.

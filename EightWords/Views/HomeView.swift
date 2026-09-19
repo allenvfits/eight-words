@@ -3,11 +3,16 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject private var dailyStore: DailyWordStore
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
+    @EnvironmentObject private var learningStore: LearningProfileStore
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
 
     @State private var showingPaywall = false
     @State private var showingSavedWords = false
+    @State private var showingProfiles = false
+    @State private var showingRewards = false
+    @State private var showingLegal = false
+    @State private var practiceMode: PracticeMode?
     @State private var cardIdentity = UUID()
     @State private var showingSyllables = false
 
@@ -15,7 +20,7 @@ struct HomeView: View {
 
     var body: some View {
         ZStack {
-            AppColors.canvas.ignoresSafeArea()
+            themedCanvas.ignoresSafeArea()
             backgroundShapes
 
             ScrollView(showsIndicators: false) {
@@ -30,6 +35,8 @@ struct HomeView: View {
                         .padding(.top, 22)
                     nextButton
                         .padding(.top, 18)
+                    learningHub
+                        .padding(.top, 18)
                     footer
                         .padding(.top, 18)
                         .padding(.bottom, 28)
@@ -39,12 +46,27 @@ struct HomeView: View {
                 .frame(maxWidth: .infinity)
             }
         }
-        .onAppear { dailyStore.beginIfNeeded() }
+        .onAppear {
+            dailyStore.beginIfNeeded()
+            registerVisibleWord()
+        }
         .sheet(isPresented: $showingPaywall) {
             PaywallView()
         }
         .sheet(isPresented: $showingSavedWords) {
             SavedWordsView()
+        }
+        .sheet(isPresented: $showingProfiles) {
+            ProfilesView()
+        }
+        .sheet(isPresented: $showingRewards) {
+            RewardsView()
+        }
+        .sheet(isPresented: $showingLegal) {
+            LegalView()
+        }
+        .sheet(item: $practiceMode) { mode in
+            PracticeView(mode: mode)
         }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
@@ -54,6 +76,14 @@ struct HomeView: View {
         .onChange(of: dailyStore.selectedDifficulty) { _, _ in
             showingSyllables = false
             cardIdentity = UUID()
+            registerVisibleWord()
+        }
+        .onChange(of: dailyStore.sequenceIndex) { _, _ in
+            registerVisibleWord()
+        }
+        .onChange(of: learningStore.activeProfileID) { _, profileID in
+            dailyStore.activateProfile(profileID)
+            registerVisibleWord()
         }
         .alert("Something went wrong", isPresented: errorIsPresented) {
             Button("OK", role: .cancel) {
@@ -112,6 +142,18 @@ struct HomeView: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel("Saved words, \(dailyStore.savedWordCount)")
+
+                Button {
+                    showingProfiles = true
+                } label: {
+                    Text(String(learningStore.activeProfile.name.prefix(1)).uppercased())
+                        .font(.system(size: 15, weight: .black, design: .rounded))
+                        .foregroundStyle(.white)
+                        .frame(width: 42, height: 42)
+                        .background(AppColors.ink, in: Circle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Learner profile: \(learningStore.activeProfile.name)")
 
                 if subscriptionManager.isSubscribed {
                     Button {
@@ -268,9 +310,11 @@ struct HomeView: View {
                     .padding(.horizontal, 10)
                     .padding(.vertical, 6)
                     .background(dailyStore.selectedDifficulty.color, in: Capsule())
-                Text("/ \(word.pronunciation) /")
-                    .font(.system(size: 15, weight: .medium, design: .rounded))
-                    .foregroundStyle(AppColors.muted)
+                if !word.pronunciation.isEmpty {
+                    Text("/ \(word.pronunciation) /")
+                        .font(.system(size: 15, weight: .medium, design: .rounded))
+                        .foregroundStyle(AppColors.muted)
+                }
             }
             .padding(.top, 8)
 
@@ -284,20 +328,22 @@ struct HomeView: View {
                 .foregroundStyle(AppColors.ink)
                 .fixedSize(horizontal: false, vertical: true)
 
-            HStack(alignment: .top, spacing: 10) {
-                Image(systemName: "quote.opening")
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundStyle(dailyStore.selectedDifficulty.color)
-                    .padding(.top, 2)
-                Text(word.example)
-                    .font(.system(size: 16, weight: .medium, design: .rounded))
-                    .italic()
-                    .foregroundStyle(AppColors.muted)
-                    .fixedSize(horizontal: false, vertical: true)
+            if !word.example.isEmpty {
+                HStack(alignment: .top, spacing: 10) {
+                    Image(systemName: "quote.opening")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundStyle(dailyStore.selectedDifficulty.color)
+                        .padding(.top, 2)
+                    Text(word.example)
+                        .font(.system(size: 16, weight: .medium, design: .rounded))
+                        .italic()
+                        .foregroundStyle(AppColors.muted)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .padding(16)
+                .background(dailyStore.selectedDifficulty.color.opacity(0.08), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                .padding(.top, 22)
             }
-            .padding(16)
-            .background(dailyStore.selectedDifficulty.color.opacity(0.08), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-            .padding(.top, 22)
         }
         .padding(24)
         .background(.white, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
@@ -367,6 +413,53 @@ struct HomeView: View {
         .buttonStyle(PressButtonStyle())
     }
 
+    private var learningHub: some View {
+        VStack(alignment: .leading, spacing: 13) {
+            HStack {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("PRACTICE & EARN")
+                        .font(.system(size: 12, weight: .black, design: .rounded))
+                        .tracking(1.1)
+                        .foregroundStyle(AppColors.muted)
+                    Text("\(learningStore.activeProfile.name) · \(learningStore.points) points · \(learningStore.activeProfile.streak)-day streak")
+                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                        .foregroundStyle(AppColors.ink)
+                }
+                Spacer()
+                Image(systemName: "star.fill")
+                    .foregroundStyle(AppColors.sun)
+            }
+
+            HStack(spacing: 9) {
+                hubButton("Quiz", icon: "questionmark.circle.fill") { practiceMode = .quiz }
+                hubButton("Test", icon: "checkmark.seal.fill") { practiceMode = .test }
+                hubButton("Rewards", icon: "gift.fill") { showingRewards = true }
+            }
+        }
+        .padding(16)
+        .background(.white.opacity(0.92), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .stroke(AppColors.line, lineWidth: 1)
+        }
+    }
+
+    private func hubButton(_ title: String, icon: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            VStack(spacing: 7) {
+                Image(systemName: icon)
+                    .font(.system(size: 18, weight: .bold))
+                Text(title)
+                    .font(.system(size: 13, weight: .black, design: .rounded))
+            }
+            .foregroundStyle(AppColors.ink)
+            .frame(maxWidth: .infinity)
+            .frame(height: 66)
+            .background(AppColors.canvas, in: RoundedRectangle(cornerRadius: 15, style: .continuous))
+        }
+        .buttonStyle(.plain)
+    }
+
     private var footer: some View {
         VStack(spacing: 10) {
             Text(subscriptionManager.isSubscribed ? "Unlimited words with Eight Words Plus" : "Eight new chances to learn — every day.")
@@ -374,9 +467,14 @@ struct HomeView: View {
                 .foregroundStyle(AppColors.muted)
                 .multilineTextAlignment(.center)
 
+            Text("3,000+ extended words available offline")
+                .font(.system(size: 11, weight: .bold, design: .rounded))
+                .foregroundStyle(AppColors.muted)
+
             HStack(spacing: 18) {
                 Link("Privacy", destination: AppLinks.privacy)
                 Link("Support", destination: AppLinks.support)
+                Button("Legal") { showingLegal = true }
             }
             .font(.system(size: 11, weight: .bold, design: .rounded))
             .foregroundStyle(AppColors.muted)
@@ -391,12 +489,27 @@ struct HomeView: View {
                 .blur(radius: 2)
                 .offset(x: proxy.size.width - 120, y: -120)
             Circle()
-                .fill(AppColors.sun.opacity(0.13))
+                .fill(themeHighlight.opacity(0.16))
                 .frame(width: 190, height: 190)
                 .offset(x: -95, y: proxy.size.height * 0.62)
         }
         .ignoresSafeArea()
         .allowsHitTesting(false)
+    }
+
+    private var themedCanvas: Color {
+        switch learningStore.activeProfile.activeThemeID {
+        case "sunshine": Color(red: 1.0, green: 0.975, blue: 0.87)
+        case "galaxy": Color(red: 0.91, green: 0.94, blue: 0.99)
+        default: AppColors.canvas
+        }
+    }
+
+    private var themeHighlight: Color {
+        switch learningStore.activeProfile.activeThemeID {
+        case "galaxy": Color(red: 0.43, green: 0.48, blue: 0.9)
+        default: AppColors.sun
+        }
     }
 
     private var errorIsPresented: Binding<Bool> {
@@ -415,6 +528,13 @@ struct HomeView: View {
         } else {
             showingPaywall = true
         }
+    }
+
+    private func registerVisibleWord() {
+        _ = learningStore.registerLearnedWord(
+            dailyStore.currentWord,
+            completedDailyEight: dailyStore.viewedCount >= DailyWordStore.freeDailyLimit
+        )
     }
 }
 
@@ -496,4 +616,5 @@ enum AppColors {
     HomeView()
         .environmentObject(DailyWordStore())
         .environmentObject(SubscriptionManager())
+        .environmentObject(LearningProfileStore())
 }

@@ -14,7 +14,7 @@ final class WordCatalogTests: XCTestCase {
 
     func testBundledWordIdentifiersAreUniqueAndStable() {
         let words = Difficulty.allCases.flatMap { WordLibrary.entries[$0] ?? [] }
-        XCTAssertEqual(words.count, 60)
+        XCTAssertGreaterThanOrEqual(words.count, 3_000)
         XCTAssertEqual(Set(words.map(\.id)).count, words.count)
         XCTAssertEqual(
             WordLibrary.entries[.beginner]?.first?.id,
@@ -30,9 +30,44 @@ final class WordCatalogTests: XCTestCase {
     }
 
     func testRequiredAppLinksUseHTTPS() {
-        for url in [AppLinks.privacy, AppLinks.support, AppLinks.terms, AppLinks.manageSubscriptions] {
+        for url in [
+            AppLinks.privacy,
+            AppLinks.support,
+            AppLinks.terms,
+            AppLinks.manageSubscriptions,
+            AppLinks.openEnglishWordNet,
+            AppLinks.creativeCommonsAttribution
+        ] {
             XCTAssertEqual(url.scheme, "https", "Expected a secure URL for \(url)")
         }
+    }
+
+    func testExtendedCatalogHasAThousandWordsAtEveryLevel() {
+        for difficulty in Difficulty.allCases {
+            XCTAssertGreaterThanOrEqual(WordLibrary.entries[difficulty]?.count ?? 0, 1_000)
+        }
+    }
+
+    func testPracticeEngineBuildsQuizAndTest() {
+        let learned = Set((WordLibrary.entries[.beginner] ?? []).prefix(20).map(\.id))
+        let quiz = PracticeEngine.questions(
+            mode: .quiz,
+            difficulty: .beginner,
+            catalog: WordLibrary.entries,
+            learnedWordIDs: learned
+        )
+        let test = PracticeEngine.questions(
+            mode: .test,
+            difficulty: .beginner,
+            catalog: WordLibrary.entries,
+            learnedWordIDs: learned
+        )
+
+        XCTAssertEqual(quiz.count, 5)
+        XCTAssertEqual(test.count, 10)
+        XCTAssertTrue((quiz + test).allSatisfy { question in
+            question.answers.count == 4 && question.answers.contains(where: { $0.id == question.entry.id })
+        })
     }
 
     func testSupabaseRepositoryDecodesThePublishedCatalog() async throws {
@@ -175,6 +210,38 @@ final class WordCatalogTests: XCTestCase {
         XCTAssertTrue(store.advance(isSubscribed: false))
         XCTAssertEqual(store.viewedCount, 1)
         XCTAssertEqual(store.sequenceIndex, 0)
+    }
+
+    @MainActor
+    func testProfilesKeepPointsAndDailyProgressSeparate() throws {
+        let suiteName = "WordCatalogTests.\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suiteName))
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+
+        let profileStore = LearningProfileStore(defaults: defaults)
+        let firstProfileID = profileStore.activeProfileID
+        let learnedWord = try XCTUnwrap(WordLibrary.entries[.beginner]?.first)
+        XCTAssertNotNil(profileStore.registerLearnedWord(learnedWord, completedDailyEight: false))
+        XCTAssertEqual(profileStore.points, 10)
+        XCTAssertNil(profileStore.registerLearnedWord(learnedWord, completedDailyEight: false))
+
+        let dailyStore = DailyWordStore(
+            defaults: defaults,
+            wordRepository: SupabaseWordRepository(configuration: nil)
+        )
+        dailyStore.activateProfile(firstProfileID)
+        dailyStore.toggleSaved(learnedWord)
+        XCTAssertTrue(dailyStore.isSaved(learnedWord))
+
+        XCTAssertTrue(profileStore.createProfile(name: "Second learner"))
+        dailyStore.activateProfile(profileStore.activeProfileID)
+        XCTAssertFalse(dailyStore.isSaved(learnedWord))
+        XCTAssertEqual(profileStore.points, 0)
+
+        profileStore.activate(firstProfileID)
+        dailyStore.activateProfile(firstProfileID)
+        XCTAssertTrue(dailyStore.isSaved(learnedWord))
+        XCTAssertEqual(profileStore.points, 10)
     }
 }
 

@@ -1,7 +1,7 @@
 import Foundation
 
 enum WordLibrary {
-    static let entries: [Difficulty: [WordEntry]] = [
+    static let curatedEntries: [Difficulty: [WordEntry]] = [
         .beginner: [
             word("brisk", "brisk", "adjective", "Quick, lively, and full of energy.", "We took a brisk walk before breakfast.", .beginner),
             word("cozy", "KOH-zee", "adjective", "Warm, comfortable, and relaxing.", "The reading corner felt cozy on the rainy day.", .beginner),
@@ -70,6 +70,8 @@ enum WordLibrary {
         ]
     ]
 
+    static let entries: [Difficulty: [WordEntry]] = loadBundledCatalog()
+
     static func words(
         for difficulty: Difficulty,
         on date: Date = .now,
@@ -81,6 +83,26 @@ enum WordLibrary {
         let start = (day * 7 + levelOffset * 5) % source.count
 
         return (0..<source.count).map { source[(start + $0) % source.count] }
+    }
+
+    static func merging(
+        base: [Difficulty: [WordEntry]] = entries,
+        overrides: [Difficulty: [WordEntry]]
+    ) -> [Difficulty: [WordEntry]] {
+        Dictionary(uniqueKeysWithValues: Difficulty.allCases.map { difficulty in
+            var words = base[difficulty] ?? []
+            var indexes = Dictionary(uniqueKeysWithValues: words.enumerated().map { ($0.element.id, $0.offset) })
+
+            for override in overrides[difficulty] ?? [] {
+                if let index = indexes[override.id] {
+                    words[index] = override
+                } else {
+                    indexes[override.id] = words.count
+                    words.append(override)
+                }
+            }
+            return (difficulty, words)
+        })
     }
 
     private static func word(
@@ -100,4 +122,27 @@ enum WordLibrary {
             difficulty: difficulty
         )
     }
+
+    private static func loadBundledCatalog() -> [Difficulty: [WordEntry]] {
+        guard let url = Bundle(for: CatalogBundleToken.self).url(
+            forResource: "WordCatalog",
+            withExtension: "json"
+        ),
+        let data = try? Data(contentsOf: url),
+        let decoded = try? JSONDecoder().decode([String: [WordEntry]].self, from: data)
+        else {
+            return curatedEntries
+        }
+
+        return Dictionary(uniqueKeysWithValues: Difficulty.allCases.map { difficulty in
+            let curated = curatedEntries[difficulty] ?? []
+            let curatedWords = Set(curated.map { $0.word.lowercased() })
+            let extended = (decoded[difficulty.rawValue] ?? []).filter {
+                !curatedWords.contains($0.word.lowercased())
+            }
+            return (difficulty, curated + extended)
+        })
+    }
 }
+
+private final class CatalogBundleToken: NSObject {}

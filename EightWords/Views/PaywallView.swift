@@ -182,7 +182,7 @@ struct PaywallView: View {
 
             HStack(spacing: 18) {
                 Link("Privacy", destination: AppLinks.privacy)
-                Link("Terms", destination: AppLinks.terms)
+                Link("Terms of Use", destination: AppLinks.terms)
                 Link("Support", destination: AppLinks.support)
             }
             .font(.system(size: 11, weight: .bold, design: .rounded))

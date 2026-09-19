@@ -42,7 +42,7 @@
               "locale" : "en_US"
             }
           ],
-          "productID" : "com.eightwords.plus.monthly",
+          "productID" : "com.allenvfits.eightwords.plus.monthly",
           "recurringSubscriptionPeriod" : "P1M",
           "referenceName" : "Eight Words Plus Monthly",
           "subscriptionGroupID" : "994C0C83-B13A-469F-B650-AC824D35206B",

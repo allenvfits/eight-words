@@ -265,6 +265,8 @@ function candidateAt(level, offset = 0) {
 async function fetchWord(word, level) {
   const normalized = word.toLowerCase().replace(/[^a-z]/g, "");
   if (!normalized) throw new Error("Invalid word");
+  const bundled = window.EIGHT_WORDS_CATALOG?.[level]?.find(item => item.word === normalized);
+  if (bundled) return { ...bundled };
   const first = normalized.slice(0, 1);
   const firstTwo = normalized.length === 1 ? first : normalized.slice(0, 2);
   const response = await fetch(`${REMOTE_DICTIONARY}/${first}/${firstTwo}.json`, { cache: "force-cache" });
@@ -313,7 +315,6 @@ function cleanText(value) {
 
 async function loadNextWord(advanceCursor = true) {
   if (!activeProfile) return;
-  if (advanceCursor) activeProfile.cursors[activeProfile.level] += 1;
   $("#wordLoading").hidden = false;
   $("#wordContent").hidden = true;
   $("#learnButton").disabled = true;
@@ -335,7 +336,7 @@ async function loadNextWord(advanceCursor = true) {
   }
 
   currentWord = selected;
-  activeProfile.cursors[activeProfile.level] += selected.source === "Wiktionary" ? selectedOffset : 1;
+  activeProfile.cursors[activeProfile.level] += selectedOffset + 1;
   saveProfiles();
   renderWord();
 }
@@ -349,7 +350,11 @@ function renderWord() {
   $("#pronunciation").textContent = currentWord.pronunciation ? `/ ${currentWord.pronunciation} /` : "";
   $("#definitionText").textContent = currentWord.definition;
   $("#exampleText").textContent = currentWord.example;
-  $("#wordSource").textContent = currentWord.source === "Wiktionary" ? "Definition source: Wiktionary · CC BY-SA 3.0" : "Curated by Eight Words";
+  $("#wordSource").textContent = currentWord.source === "Open English WordNet 2025"
+    ? "Definition source: Open English WordNet 2025 · CC BY 4.0"
+    : currentWord.source === "Wiktionary"
+      ? "Definition source: Wiktionary · CC BY-SA 3.0"
+      : "Curated by Eight Words";
   $("#wordLoading").hidden = true;
   $("#wordContent").hidden = false;
   $("#learnButton").disabled = false;

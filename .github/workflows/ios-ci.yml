@@ -21,6 +21,38 @@ jobs:
           set -euo pipefail
           plutil -lint EightWords/Info.plist EightWords/PrivacyInfo.xcprivacy
           python3 -m json.tool EightWords/EightWords.storekit > /dev/null
+          python3 - <<'PY'
+          import json
+          import pathlib
+          import plistlib
+
+          catalog = json.loads(pathlib.Path("EightWords/Data/WordCatalog.json").read_text())
+          assert set(catalog) == {"beginner", "intermediate", "advanced"}
+          assert all(len(catalog[level]) == 1000 for level in catalog)
+          words = [word for level in catalog.values() for word in level]
+          assert len({word["id"] for word in words}) == 3000
+          assert all(word["word"] and word["definition"] for word in words)
+
+          storekit = json.loads(pathlib.Path("EightWords/EightWords.storekit").read_text())
+          product = storekit["subscriptionGroups"][0]["subscriptions"][0]
+          assert product["productID"] == "com.allenvfits.eightwords.plus.monthly"
+          assert product["displayPrice"] == "1.99"
+          assert product["recurringSubscriptionPeriod"] == "P1M"
+
+          with pathlib.Path("EightWords/PrivacyInfo.xcprivacy").open("rb") as handle:
+              privacy = plistlib.load(handle)
+          assert privacy["NSPrivacyTracking"] is False
+          assert privacy["NSPrivacyCollectedDataTypes"] == []
+
+          for required in (
+              "docs/privacy/index.html",
+              "docs/support/index.html",
+              "docs/terms/index.html",
+              "docs/attributions/index.html",
+              "THIRD-PARTY-NOTICES.md",
+          ):
+              assert pathlib.Path(required).is_file(), required
+          PY
       - name: Validate opaque App Store icon
         run: |
           set -euo pipefail
@@ -61,6 +93,7 @@ jobs:
           app="$derived/Build/Products/Release-iphoneos/EightWords.app"
           test -x "$app/EightWords"
           test -f "$app/PrivacyInfo.xcprivacy"
+          test -f "$app/WordCatalog.json"
           plutil -lint "$app/Info.plist" "$app/PrivacyInfo.xcprivacy"
           test "$(plutil -extract CFBundlePackageType raw -o - "$app/Info.plist")" = "APPL"
       - name: Run unit tests
@@ -85,4 +118,6 @@ jobs:
           node-version: 24
           package-manager-cache: false
       - name: Check JavaScript syntax
-        run: node --check web/app.js
+        run: |
+          node --check web/app.js
+          node --check web/data/words.js

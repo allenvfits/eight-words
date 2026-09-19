@@ -1,4 +1,4 @@
-const CACHE = "eight-words-v11";
+const CACHE = "eight-words-v12";
 const APP_SHELL = [
   "./",
   "./index.html",

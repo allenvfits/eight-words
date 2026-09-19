@@ -71,9 +71,11 @@ private struct SavedWordRow: View {
                 .accessibilityLabel("Hear \(word.word) pronounced")
             }
 
-            Text("/ \(word.pronunciation) /")
-                .font(.system(size: 13, weight: .semibold, design: .rounded))
-                .foregroundStyle(AppColors.muted)
+            if !word.pronunciation.isEmpty {
+                Text("/ \(word.pronunciation) /")
+                    .font(.system(size: 13, weight: .semibold, design: .rounded))
+                    .foregroundStyle(AppColors.muted)
+            }
 
             Text(word.definition)
                 .font(.system(size: 15, weight: .medium, design: .rounded))
