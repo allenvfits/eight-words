@@ -6,7 +6,7 @@ struct LegalView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section("Eight Words") {
+                Section("Eightwise") {
                     Link("Privacy Policy", destination: AppLinks.privacy)
                     Link("Terms of Use (Apple Standard EULA)", destination: AppLinks.terms)
                     Link("Support", destination: AppLinks.support)
@@ -14,12 +14,12 @@ struct LegalView: View {
                 }
 
                 Section("Plus subscription") {
-                    Text("Eight Words Plus is an auto-renewable monthly subscription. Payment is charged to your Apple Account when you confirm purchase. It renews automatically unless canceled at least 24 hours before the end of the current billing period. You can manage or cancel it in Apple Account settings.")
+                    Text("Eightwise Plus is an auto-renewable monthly subscription. Payment is charged to your Apple Account when you confirm purchase. It renews automatically unless canceled at least 24 hours before the end of the current billing period. You can manage or cancel it in Apple Account settings.")
                     Text("The exact localized price shown before purchase is provided by Apple and may vary by country or region.")
                 }
 
                 Section("Vocabulary attribution") {
-                    Text("The extended catalog contains a filtered and reformatted subset of Open English WordNet 2025, licensed under Creative Commons Attribution 4.0. Curated Eight Words entries are original to this project.")
+                    Text("The extended catalog contains a filtered and reformatted subset of Open English WordNet 2025, licensed under Creative Commons Attribution 4.0. Curated Eightwise entries are original to this project.")
                     Link("Open English WordNet", destination: AppLinks.openEnglishWordNet)
                     Link("CC BY 4.0 license", destination: AppLinks.creativeCommonsAttribution)
                 }
@@ -44,4 +44,3 @@ struct LegalView: View {
 #Preview {
     LegalView()
 }
-

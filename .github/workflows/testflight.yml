@@ -16,7 +16,7 @@ jobs:
     timeout-minutes: 30
     environment: testflight
     env:
-      APP_BUNDLE_ID: com.allenvfits.eightwords
+      APP_BUNDLE_ID: com.allenvfits.eightwise
       APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
       ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
       ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}

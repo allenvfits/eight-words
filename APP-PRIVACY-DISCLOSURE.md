@@ -1,4 +1,4 @@
-# Eight Words — App Store Privacy Answers
+# Eightwise — App Store Privacy Answers
 
 Use the profile that matches the exact build uploaded to App Store Connect. The current release build is offline-only: it uses the bundled catalog and stores learner data locally on the device.
 
@@ -30,7 +30,7 @@ For every listed data type:
 - Learner profiles, selected difficulty, daily progress, learned and saved words, quiz/test activity, points, streaks, and rewards stay in `UserDefaults` on the device.
 - The cached vocabulary catalog stays in Application Support on the device.
 - Spoken pronunciation uses Apple's on-device speech API.
-- Apple processes payment details and StoreKit entitlements; Eight Words never receives payment-card data.
+- Apple processes payment details and StoreKit entitlements; Eightwise never receives payment-card data.
 - The app does not request contacts, photos, microphone, camera, health, precise GPS location, or an advertising identifier.
 - The app has no ads, third-party analytics SDK, cross-app tracking, or data broker sharing, so it does not need an App Tracking Transparency prompt.
 

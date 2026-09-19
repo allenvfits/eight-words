@@ -62,7 +62,7 @@ struct PaywallView: View {
             }
             .accessibilityHidden(true)
 
-            Text(subscriptionManager.isSubscribed ? "Eight Words Plus is active." : "Unlimited words. No daily cap.")
+            Text(subscriptionManager.isSubscribed ? "Eightwise Plus is active." : "Unlimited words. No daily cap.")
                 .font(.system(.largeTitle, design: .rounded, weight: .black))
                 .multilineTextAlignment(.center)
                 .foregroundStyle(AppColors.ink)

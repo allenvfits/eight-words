@@ -167,7 +167,7 @@ struct HomeView: View {
                             .background(AppColors.sun, in: Capsule())
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel("Eight Words Plus active. Manage subscription")
+                    .accessibilityLabel("Eightwise Plus active. Manage subscription")
                 }
             }
         }
@@ -462,7 +462,7 @@ struct HomeView: View {
 
     private var footer: some View {
         VStack(spacing: 10) {
-            Text(subscriptionManager.isSubscribed ? "Unlimited words with Eight Words Plus" : "Eight new chances to learn — every day.")
+            Text(subscriptionManager.isSubscribed ? "Unlimited words with Eightwise Plus" : "Eight new chances to learn — every day.")
                 .font(.system(size: 12, weight: .semibold, design: .rounded))
                 .foregroundStyle(AppColors.muted)
                 .multilineTextAlignment(.center)

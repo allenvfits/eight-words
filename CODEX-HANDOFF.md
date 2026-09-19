@@ -1,10 +1,10 @@
-# Eight Words — Codex Handoff
+# Eightwise — Codex Handoff
 
 Last updated: September 19, 2026
 
 ## Goal
 
-Prepare Eight Words for TestFlight and App Store review, add a secure Supabase-backed vocabulary catalog, and keep the app fully usable offline. The app is native SwiftUI for iPhone and iPad. A separate Render service is not required for the current architecture.
+Prepare Eightwise for TestFlight and App Store review, add a secure Supabase-backed vocabulary catalog, and keep the app fully usable offline. The app is native SwiftUI for iPhone and iPad. A separate Render service is not required for the current architecture.
 
 ## Completed
 
@@ -30,7 +30,7 @@ Prepare Eight Words for TestFlight and App Store review, add a secure Supabase-b
 - Added a commercially usable, attributed catalog of 3,000 Open English WordNet entries plus 60 original curated entries. The catalog is bundled for offline use, while Supabase rows can update or extend it without shrinking the library.
 - Added native five-question quizzes, ten-question tests, up to six private on-device learner profiles, separate progress, points, streaks, saved words, deterministic rewards, and working Sunshine/Galaxy themes.
 - Replaced the browser preview's research-only candidate list with the same CC BY 4.0 catalog and removed the obsolete source list.
-- Finalized the code-side identifiers as `com.allenvfits.eightwords` and `com.allenvfits.eightwords.plus.monthly`.
+- Finalized the code-side identifiers as `com.allenvfits.eightwise` and `com.allenvfits.eightwise.plus.monthly`.
 
 ## Latest verification
 
@@ -44,7 +44,7 @@ Prepare Eight Words for TestFlight and App Store review, add a secure Supabase-b
 These actions require the owner's paid accounts or private information:
 
 1. **Supabase is optional for version 1:** a dedicated hosted project was quoted at **$10/month** and was not created because no purchase was authorized. The app is complete and fully functional offline. If live updates are enabled later, create the project, apply `supabase/schema.sql` and `supabase/seed.sql`, configure only the project URL and publishable key, test a public REST read, and run Supabase security/performance advisors.
-2. **Apple identifiers and product:** register `com.allenvfits.eightwords`, create the monthly product `com.allenvfits.eightwords.plus.monthly`, set the US price to $1.99, and complete its localization and review screenshot in App Store Connect.
+2. **Apple identifiers and product:** register `com.allenvfits.eightwise`, create the monthly product `com.allenvfits.eightwise.plus.monthly`, set the US price to $1.99, and complete its localization and review screenshot in App Store Connect.
 3. **Signing:** no `DEVELOPMENT_TEAM` belongs in GitHub. The owner must select the Apple Developer team locally in Xcode.
 4. **Support contact:** the public support page currently links to GitHub Issues. A private support/privacy email should be added before submission if the owner does not want customers using public issues.
 

@@ -4,7 +4,7 @@ import StoreKit
 
 @MainActor
 final class SubscriptionManager: ObservableObject {
-    static let monthlyProductID = "com.allenvfits.eightwords.plus.monthly"
+    static let monthlyProductID = "com.allenvfits.eightwise.plus.monthly"
 
     @Published private(set) var monthlyProduct: Product?
     @Published private(set) var isSubscribed = false
@@ -34,7 +34,7 @@ final class SubscriptionManager: ObservableObject {
         do {
             monthlyProduct = try await Product.products(for: [Self.monthlyProductID]).first
             if monthlyProduct == nil, showError {
-                errorMessage = "Eight Words Plus isn't available right now. Please try again later."
+                errorMessage = "Eightwise Plus isn't available right now. Please try again later."
             }
         } catch {
             if showError {

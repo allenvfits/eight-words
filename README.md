@@ -1,6 +1,8 @@
-# Eight Words
+# Eightwise
 
-Eight Words is a native SwiftUI vocabulary app for iPhone and iPad. It gives people a calm, age-inclusive way to learn words at three levels: **Everyday**, **Growing**, and **Curious**.
+Eightwise is a native SwiftUI vocabulary app for iPhone and iPad. It gives people a calm, age-inclusive way to learn words at three levels: **Everyday**, **Growing**, and **Curious**.
+
+**Eight words. A little wiser.**
 
 The repository also includes a Windows-friendly browser preview in `web/`. Both versions use the same 3,000-word extended offline catalog, clickable syllable guides, multiple local profiles, prominent difficulty controls, saved-word favorites, quizzes, ten-question tests, points, streaks, and redeemable in-app rewards.
 
@@ -44,8 +46,8 @@ The extended catalog is a filtered and reformatted subset of Open English WordNe
 
 ## Before App Store submission
 
-1. Register `com.allenvfits.eightwords` in your Apple Developer account, or replace it everywhere with another identifier you own.
-2. In App Store Connect, create a subscription group and an auto-renewable monthly subscription with product ID `com.allenvfits.eightwords.plus.monthly`.
+1. Register `com.allenvfits.eightwise` in your Apple Developer account, or replace it everywhere with another identifier you own.
+2. In App Store Connect, create a subscription group and an auto-renewable monthly subscription with product ID `com.allenvfits.eightwise.plus.monthly`.
 3. Set the US price to `$1.99`; Apple automatically handles local pricing and tax presentation.
 4. Confirm that `https://allenvfits.github.io/eight-words/privacy/` and `/support/` are live.
 5. Add your development team under **Signing & Capabilities**.
@@ -62,21 +64,23 @@ This build does not require an account, show advertising, or upload learning pro
 
 ## Product IDs
 
-- App bundle: `com.allenvfits.eightwords`
-- Monthly subscription: `com.allenvfits.eightwords.plus.monthly`
+- App bundle: `com.allenvfits.eightwise`
+- Monthly subscription: `com.allenvfits.eightwise.plus.monthly`
 
 ## Suggested App Store copy
 
-**Subtitle:** A little smarter every day
+**Name:** Eightwise: Daily Vocabulary
+
+**Subtitle:** Eight words. A little wiser.
 
 **Promotional text:** Learn eight useful words a day with clear definitions, real examples, and three levels made for curious minds of every age.
 
 **Description:**
 
-Build a stronger vocabulary one simple word at a time. Explore more than 3,000 words across three levels, read clear definitions, hear spoken pronunciation, split words into syllables, and practice with quizzes and tests. Learn eight words free each day, or unlock unlimited learning with Eight Words Plus for $1.99 a month.
+Build a stronger vocabulary one simple word at a time. Explore more than 3,000 words across three levels, read clear definitions, hear spoken pronunciation, split words into syllables, and practice with quizzes and tests. Learn eight words free each day, or unlock unlimited learning with Eightwise Plus for $1.99 a month.
 
 No online account. No ads. No clutter. Local learner profiles keep progress, points, streaks, saved words, and rewards separate on one device.
 
 ## Generated app-icon prompt
 
-The icon was created with the built-in image-generation tool using this prompt: “Create a polished, minimalist iOS app icon for an age-inclusive vocabulary app called Eight Words. One bold, friendly number 8 as the only symbol, subtly formed from two overlapping speech bubbles. Crisp flat vector-like design; near-black charcoal, warm oat/cream, and a small golden-yellow accent; centered and legible at small sizes; no extra words or watermark.”
+The icon was created with the built-in image-generation tool using this prompt: “Create a polished, minimalist iOS app icon for an age-inclusive vocabulary app called Eightwise. One bold, friendly number 8 as the only symbol, subtly formed from two overlapping speech bubbles. Crisp flat vector-like design; near-black charcoal, warm oat/cream, and a small golden-yellow accent; centered and legible at small sizes; no extra words or watermark.”

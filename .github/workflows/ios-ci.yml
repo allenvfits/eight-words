@@ -35,7 +35,7 @@ jobs:
 
           storekit = json.loads(pathlib.Path("EightWords/EightWords.storekit").read_text())
           product = storekit["subscriptionGroups"][0]["subscriptions"][0]
-          assert product["productID"] == "com.allenvfits.eightwords.plus.monthly"
+          assert product["productID"] == "com.allenvfits.eightwise.plus.monthly"
           assert product["displayPrice"] == "1.99"
           assert product["recurringSubscriptionPeriod"] == "P1M"
 

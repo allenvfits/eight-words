@@ -12,7 +12,7 @@ create table if not exists public.words (
     sort_order integer not null check (sort_order >= 0),
     is_active boolean not null default true,
     published_at timestamptz,
-    source_name text not null default 'Eight Words original',
+    source_name text not null default 'Eightwise original',
     source_url text,
     license_name text,
     attribution text,
@@ -43,6 +43,6 @@ create policy "Published words are readable"
     );
 
 comment on table public.words is
-    'Read-only vocabulary catalog for the Eight Words iOS app.';
+    'Read-only vocabulary catalog for the Eightwise iOS app.';
 
 commit;

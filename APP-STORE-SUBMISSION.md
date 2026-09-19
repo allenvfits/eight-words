@@ -1,4 +1,4 @@
-# Eight Words — App Store Submission Handoff
+# Eightwise — App Store Submission Handoff
 
 ## What is ready in the repository
 
@@ -17,7 +17,7 @@
 
 ### 1. Bundle ID
 
-The project uses `com.allenvfits.eightwords`. Register that exact identifier in the Apple Developer account, or replace it consistently before archiving.
+The project uses `com.allenvfits.eightwise`. Register that exact identifier in the Apple Developer account, or replace it consistently before archiving.
 
 ### 2. Apple development team
 
@@ -39,8 +39,8 @@ The Base64 values must be single-line encodings of the `.p8`, Apple Distribution
 
 ## Suggested App Store Connect metadata
 
-- **Name:** Eight Words
-- **Subtitle:** A little smarter every day
+- **Name:** Eightwise: Daily Vocabulary
+- **Subtitle:** Eight words. A little wiser.
 - **Primary category:** Education
 - **Secondary category:** Reference
 - **Age rating:** Complete the questionnaire truthfully; the current content is designed to qualify for a broad audience. Do not select the Kids Category unless the product is intentionally redesigned for its additional rules.
@@ -57,7 +57,7 @@ Learn eight useful words a day with clear definitions, natural examples, spoken 
 
 Build a stronger vocabulary one useful word at a time. Choose your level, read a clear definition, hear the pronunciation, split the word into syllables, and see it used in a natural sentence.
 
-Explore more than 3,000 words, take quizzes and tests, earn points, unlock in-app rewards, and keep progress separate with private learner profiles. Eight Words gives you eight free words each day with no online account, no ads, and no clutter. Eight Words Plus removes the daily cap for the localized monthly price shown before purchase.
+Explore more than 3,000 words, take quizzes and tests, earn points, unlock in-app rewards, and keep progress separate with private learner profiles. Eightwise gives you eight free words each day with no online account, no ads, and no clutter. Eightwise Plus removes the daily cap for the localized monthly price shown before purchase.
 
 Privacy Policy: https://allenvfits.github.io/eight-words/privacy/
 
@@ -69,15 +69,15 @@ Terms of Use: https://allenvfits.github.io/eight-words/terms/
 
 ## Review notes draft
 
-Eight Words does not require an online account. Learner profiles, daily progress, selected difficulty, learned and saved words, quiz/test activity, points, streaks, and rewards remain on the device. This release uses its bundled vocabulary catalog and does not have Supabase credentials. Tap through eight words to display the Plus purchase screen. The first paywall tap loads and displays Apple’s localized product information; a separate tap starts purchase. Use Restore Purchases to test entitlement restoration. The app uses StoreKit 2 for all digital purchases.
+Eightwise does not require an online account. Learner profiles, daily progress, selected difficulty, learned and saved words, quiz/test activity, points, streaks, and rewards remain on the device. This release uses its bundled vocabulary catalog and does not have Supabase credentials. Tap through eight words to display the Plus purchase screen. The first paywall tap loads and displays Apple’s localized product information; a separate tap starts purchase. Use Restore Purchases to test entitlement restoration. The app uses StoreKit 2 for all digital purchases.
 
 ## App Store Connect steps that require the account holder
 
 1. Confirm Apple Developer Program membership is active.
-2. Register `com.allenvfits.eightwords`, or update the project to another identifier you own.
+2. Register `com.allenvfits.eightwise`, or update the project to another identifier you own.
 3. Select the development team in Xcode and verify automatic signing.
 4. Create the app record in App Store Connect.
-5. Create the subscription group and product `com.allenvfits.eightwords.plus.monthly`, add localization, `$1.99` US pricing, availability, and the required review screenshot.
+5. Create the subscription group and product `com.allenvfits.eightwise.plus.monthly`, add localization, `$1.99` US pricing, availability, and the required review screenshot.
 6. Archive a Release build on macOS, run **Validate App**, and upload it.
 7. Add iPhone and iPad screenshots, privacy answers, age rating, contact details, and review notes.
 8. Test the uploaded build with TestFlight before submitting it for App Review.

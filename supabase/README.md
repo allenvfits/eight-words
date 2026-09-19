@@ -1,4 +1,4 @@
-# Eight Words Supabase setup
+# Eightwise Supabase setup
 
 The iOS app reads published vocabulary directly from Supabase's Data API. It does not require a separate Render service.
 

@@ -332,7 +332,7 @@ async function loadNextWord(advanceCursor = true) {
 
   if (!selected) {
     const localPool = FALLBACK_WORDS.filter(item => item.level === activeProfile.level);
-    selected = { ...localPool[activeProfile.cursors[activeProfile.level] % localPool.length], pronunciation: "", source: "Eight Words" };
+    selected = { ...localPool[activeProfile.cursors[activeProfile.level] % localPool.length], pronunciation: "", source: "Eightwise" };
   }
 
   currentWord = selected;
@@ -354,7 +354,7 @@ function renderWord() {
     ? "Definition source: Open English WordNet 2025 · CC BY 4.0"
     : currentWord.source === "Wiktionary"
       ? "Definition source: Wiktionary · CC BY-SA 3.0"
-      : "Curated by Eight Words";
+      : "Curated by Eightwise";
   $("#wordLoading").hidden = true;
   $("#wordContent").hidden = false;
   $("#learnButton").disabled = false;

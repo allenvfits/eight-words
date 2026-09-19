@@ -21,7 +21,7 @@
       "localizations" : [
 
       ],
-      "name" : "Eight Words Plus",
+      "name" : "Eightwise Plus",
       "subscriptions" : [
         {
           "adHocOffers" : [
@@ -38,13 +38,13 @@
           "localizations" : [
             {
               "description" : "Unlimited daily words across all three levels.",
-              "displayName" : "Eight Words Plus",
+              "displayName" : "Eightwise Plus",
               "locale" : "en_US"
             }
           ],
-          "productID" : "com.allenvfits.eightwords.plus.monthly",
+          "productID" : "com.allenvfits.eightwise.plus.monthly",
           "recurringSubscriptionPeriod" : "P1M",
-          "referenceName" : "Eight Words Plus Monthly",
+          "referenceName" : "Eightwise Plus Monthly",
           "subscriptionGroupID" : "994C0C83-B13A-469F-B650-AC824D35206B",
           "type" : "RecurringSubscription"
         }
