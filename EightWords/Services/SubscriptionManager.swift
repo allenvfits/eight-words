@@ -1,0 +1,119 @@
+import Combine
+import Foundation
+import StoreKit
+
+@MainActor
+final class SubscriptionManager: ObservableObject {
+    static let monthlyProductID = "com.eightwords.plus.monthly"
+
+    @Published private(set) var monthlyProduct: Product?
+    @Published private(set) var isSubscribed = false
+    @Published private(set) var isLoading = false
+    @Published var errorMessage: String?
+
+    private var updatesTask: Task<Void, Never>?
+
+    init() {
+        updatesTask = observeTransactions()
+    }
+
+    deinit {
+        updatesTask?.cancel()
+    }
+
+    func prepare() async {
+        await loadProducts()
+        await refreshEntitlements()
+    }
+
+    func loadProducts() async {
+        isLoading = true
+        defer { isLoading = false }
+
+        do {
+            monthlyProduct = try await Product.products(for: [Self.monthlyProductID]).first
+        } catch {
+            errorMessage = "We couldn't load the subscription. Please try again."
+        }
+    }
+
+    func purchase() async {
+        if monthlyProduct == nil {
+            await loadProducts()
+        }
+
+        guard let monthlyProduct else {
+            errorMessage = "Eight Words Plus isn't available right now."
+            return
+        }
+
+        isLoading = true
+        defer { isLoading = false }
+
+        do {
+            let result = try await monthlyProduct.purchase()
+            switch result {
+            case .success(let verification):
+                let transaction = try checkVerified(verification)
+                await transaction.finish()
+                await refreshEntitlements()
+            case .pending:
+                errorMessage = "Your purchase is waiting for approval."
+            case .userCancelled:
+                break
+            @unknown default:
+                break
+            }
+        } catch {
+            errorMessage = "The purchase couldn't be completed. Please try again."
+        }
+    }
+
+    func restore() async {
+        isLoading = true
+        defer { isLoading = false }
+
+        do {
+            try await AppStore.sync()
+            await refreshEntitlements()
+        } catch {
+            errorMessage = "We couldn't restore purchases. Please try again."
+        }
+    }
+
+    private func refreshEntitlements() async {
+        var hasActiveSubscription = false
+
+        for await result in Transaction.currentEntitlements {
+            guard let transaction = try? checkVerified(result) else { continue }
+            if transaction.productID == Self.monthlyProductID,
+               transaction.revocationDate == nil {
+                hasActiveSubscription = true
+            }
+        }
+
+        isSubscribed = hasActiveSubscription
+    }
+
+    private func observeTransactions() -> Task<Void, Never> {
+        Task(priority: .background) { [weak self] in
+            for await result in Transaction.updates {
+                guard let self,
+                      let transaction = try? self.checkVerified(result) else { continue }
+                await transaction.finish()
+                await self.refreshEntitlements()
+            }
+        }
+    }
+
+    nonisolated private func checkVerified<T>(_ result: VerificationResult<T>) throws -> T {
+        switch result {
+        case .verified(let safe): safe
+        case .unverified: throw StoreError.failedVerification
+        }
+    }
+
+    private enum StoreError: Error {
+        case failedVerification
+    }
+}

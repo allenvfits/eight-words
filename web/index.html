@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f6f2e8">
+  <meta name="description" content="Learn eight words a day, take quizzes, earn points, and grow your vocabulary.">
+  <title>Eight Words</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="authScreen" class="auth-screen">
+    <div class="auth-art" aria-hidden="true">
+      <div class="logo-orbit"><span>8</span></div>
+    </div>
+    <section class="auth-card" aria-labelledby="welcomeTitle">
+      <p class="eyebrow">WELCOME TO EIGHT WORDS</p>
+      <h1 id="welcomeTitle">A little smarter<br>every day.</h1>
+      <p class="auth-copy">Learn at your level, test yourself, and earn rewards as your vocabulary grows.</p>
+
+      <div id="profileChooser" class="profile-chooser" hidden>
+        <p class="field-label">Choose your profile</p>
+        <div id="profileList" class="profile-list"></div>
+        <button id="showCreateButton" class="button button-secondary" type="button">Add another profile</button>
+      </div>
+
+      <form id="createProfileForm" class="create-profile-form">
+        <label for="displayName">What should we call you?</label>
+        <input id="displayName" name="displayName" maxlength="20" autocomplete="nickname" placeholder="Your first name" required>
+        <label for="startingLevel">Choose a starting level</label>
+        <select id="startingLevel" name="startingLevel">
+          <option value="everyday">Everyday — clear, familiar words</option>
+          <option value="growing">Growing — build a richer vocabulary</option>
+          <option value="curious">Curious — thoughtful, challenging words</option>
+        </select>
+        <button class="button button-primary" type="submit">Create my profile <span aria-hidden="true">→</span></button>
+      </form>
+      <p class="local-note"><span aria-hidden="true">🔒</span> Windows preview profiles stay only on this device.</p>
+    </section>
+  </div>
+
+  <div id="app" class="app-shell" hidden>
+    <header class="topbar">
+      <button class="brand" type="button" data-view-target="learn" aria-label="Eight Words home">
+        <span class="brand-mark">8</span>
+        <span><strong>EIGHT WORDS</strong><small>A little smarter every day</small></span>
+      </button>
+      <div class="topbar-actions">
+        <span id="plusBadge" class="plus-badge" hidden>PLUS · UNLIMITED</span>
+        <button class="points-pill" type="button" data-view-target="rewards" aria-label="Open rewards">
+          <span aria-hidden="true">✦</span><strong id="headerPoints">0</strong><small>pts</small>
+        </button>
+        <button id="avatarButton" class="avatar-button" type="button" data-view-target="profile" aria-label="Open profile">A</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="learnView" class="view active" data-view="learn">
+        <div class="view-heading">
+          <div>
+            <p class="eyebrow" id="greeting">GOOD MORNING</p>
+            <h1>Ready for a new word?</h1>
+          </div>
+        </div>
+
+        <section class="difficulty-panel" aria-labelledby="difficultyTitle">
+          <div class="difficulty-heading">
+            <p class="eyebrow">DIFFICULTY</p>
+            <h2 id="difficultyTitle">Choose your word level</h2>
+          </div>
+          <div class="difficulty-options" role="group" aria-label="Word difficulty">
+            <button type="button" data-level="everyday" aria-pressed="false"><span>🌿</span><strong>Everyday</strong><small>Clear and familiar</small></button>
+            <button type="button" data-level="growing" aria-pressed="false"><span>✨</span><strong>Growing</strong><small>Build your vocabulary</small></button>
+            <button type="button" data-level="curious" aria-pressed="false"><span>🔭</span><strong>Curious</strong><small>More challenging</small></button>
+          </div>
+        </section>
+
+        <div class="learning-layout">
+          <article id="wordCard" class="word-card" aria-live="polite">
+            <div class="word-card-top">
+              <span id="wordPosition" class="eyebrow accent">WORD 1 OF 8</span>
+              <div class="word-card-tools">
+                <button id="favoriteButton" class="icon-button" type="button" aria-label="Save this word" aria-pressed="false">♡</button>
+                <button id="speakButton" class="icon-button" type="button" aria-label="Hear this word">🔊</button>
+              </div>
+            </div>
+            <div id="wordLoading" class="word-loading">
+              <span></span><span></span><span></span>
+              <p>Finding a good word…</p>
+            </div>
+            <div id="wordContent" hidden>
+              <h2><button id="wordText" class="word-title-button" type="button" aria-expanded="false" aria-controls="syllablePanel">wonder</button></h2>
+              <p class="syllable-hint">Click the word to see its syllables</p>
+              <div id="syllablePanel" class="syllable-panel" hidden>
+                <span id="syllableText">won · der</span>
+                <small id="syllableCount">2 syllables</small>
+              </div>
+              <div class="word-meta"><span id="partOfSpeech">noun</span><span id="pronunciation">wonder</span></div>
+              <hr>
+              <p id="definitionText" class="definition">A feeling of curiosity and amazement.</p>
+              <blockquote id="exampleText">Every new word can begin with wonder.</blockquote>
+            </div>
+            <p id="wordSource" class="source-note">Definitions from Wiktionary</p>
+          </article>
+
+          <aside class="daily-panel">
+            <div class="panel-title-row"><div><p class="eyebrow">TODAY</p><h2 id="dailyTitle">Your daily eight</h2></div><strong id="dailyFraction">0/8</strong></div>
+            <div id="dailyDots" class="daily-dots" aria-label="Daily word progress"></div>
+            <div class="mini-stats">
+              <div><span aria-hidden="true">🔥</span><strong id="streakCount">1</strong><small>day streak</small></div>
+              <div><span aria-hidden="true">✓</span><strong id="learnedCount">0</strong><small>words learned</small></div>
+            </div>
+            <button id="learnButton" class="button button-primary" type="button">I learned this <span>+10 ✦</span></button>
+            <p id="dailyMessage" class="microcopy">Eight new chances to learn—every day.</p>
+          </aside>
+        </div>
+
+        <section class="quick-actions" aria-label="Practice options">
+          <button class="action-card quiz-action" type="button" data-view-target="quiz">
+            <span class="action-icon">?</span><span><strong>Quick quiz</strong><small>5 questions · earn up to 100 pts</small></span><b>→</b>
+          </button>
+          <button class="action-card test-action" type="button" data-view-target="test">
+            <span class="action-icon">✓</span><span><strong>Knowledge test</strong><small>10 questions · track your score</small></span><b>→</b>
+          </button>
+          <button id="surpriseWordButton" class="action-card surprise-action" type="button">
+            <span class="action-icon">✦</span><span><strong>Surprise word</strong><small>Explore a random word with Plus</small></span><b>→</b>
+          </button>
+        </section>
+      </section>
+
+      <section id="quizView" class="view practice-view" data-view="quiz">
+        <div class="practice-heading"><div><p class="eyebrow">QUICK QUIZ</p><h1>Pick the right meaning</h1></div><span id="quizProgress" class="question-count">1 / 5</span></div>
+        <div id="quizIntro" class="practice-intro">
+          <div class="practice-illustration">?</div>
+          <h2>Five quick questions</h2>
+          <p>Review words you have learned. Every correct answer earns 20 points the first time today.</p>
+          <button id="startQuizButton" class="button button-primary" type="button">Start quiz</button>
+        </div>
+        <div id="quizGame" class="question-card" hidden>
+          <p class="eyebrow">WHAT DOES THIS WORD MEAN?</p>
+          <h2 id="quizWord">resilient</h2>
+          <div id="quizOptions" class="answer-grid"></div>
+          <button id="quizNextButton" class="button button-primary" type="button" hidden>Next question →</button>
+        </div>
+        <div id="quizResult" class="result-card" hidden></div>
+      </section>
+
+      <section id="testView" class="view practice-view" data-view="test">
+        <div class="practice-heading"><div><p class="eyebrow">KNOWLEDGE TEST</p><h1>Show what you know</h1></div><span id="testProgress" class="question-count">1 / 10</span></div>
+        <div id="testIntro" class="practice-intro">
+          <div class="practice-illustration check">✓</div>
+          <h2>A ten-question challenge</h2>
+          <p>A mix of word and definition questions. Earn 15 points per correct answer, plus 100 for a perfect score.</p>
+          <button id="startTestButton" class="button button-primary" type="button">Start test</button>
+        </div>
+        <div id="testGame" class="question-card" hidden>
+          <p id="testPromptLabel" class="eyebrow">CHOOSE THE WORD</p>
+          <h2 id="testPrompt">Able to recover quickly after difficulty.</h2>
+          <div id="testOptions" class="answer-grid"></div>
+          <button id="testNextButton" class="button button-primary" type="button" hidden>Next question →</button>
+        </div>
+        <div id="testResult" class="result-card" hidden></div>
+      </section>
+
+      <section id="rewardsView" class="view" data-view="rewards">
+        <div class="rewards-hero">
+          <div><p class="eyebrow">YOUR REWARDS</p><h1>Curiosity pays off.</h1><p>Learn and practice to unlock fun extras.</p></div>
+          <div class="points-balance"><span>✦</span><strong id="rewardPoints">0</strong><small>points available</small></div>
+        </div>
+        <div id="rewardGrid" class="reward-grid"></div>
+        <div class="points-guide">
+          <h2>How to earn points</h2>
+          <div class="points-guide-grid">
+            <div><span>+10</span><p>Learn a new word</p></div>
+            <div><span>+20</span><p>Correct quiz answer</p></div>
+            <div><span>+15</span><p>Correct test answer</p></div>
+            <div><span>+50</span><p>Finish your daily eight</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="profileView" class="view" data-view="profile">
+        <div class="profile-hero">
+          <div id="profileAvatar" class="profile-avatar">A</div>
+          <div><p class="eyebrow">YOUR PROFILE</p><h1 id="profileName">Learner</h1><p id="profileLevel">Everyday level</p></div>
+          <button id="signOutButton" class="button button-secondary compact" type="button">Switch profile</button>
+        </div>
+        <div class="stats-grid">
+          <div><span>🔥</span><strong id="profileStreak">1</strong><small>day streak</small></div>
+          <div><span>✓</span><strong id="profileLearned">0</strong><small>words learned</small></div>
+          <div><span>✦</span><strong id="profilePoints">0</strong><small>points</small></div>
+          <div><span>★</span><strong id="profileBest">—</strong><small>best test</small></div>
+        </div>
+        <section class="profile-card">
+          <div><h2>Eight Words Plus</h2><p id="plusStatus">Free plan · 8 words each day</p></div>
+          <button id="profilePlusButton" class="button button-primary compact" type="button">See Plus</button>
+        </section>
+        <section class="profile-card saved-words-card">
+          <div class="saved-words-heading"><div><h2>Saved words</h2><p>Keep interesting words close for quick review.</p></div><strong id="savedWordCount">0</strong></div>
+          <div id="savedWordsList" class="saved-words-list"></div>
+        </section>
+        <section class="profile-card">
+          <div><h2>Windows preview account</h2><p>Your profile and progress are saved in this browser. Cloud accounts will sync across Windows and Apple devices in the production version.</p></div>
+        </section>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Main navigation">
+      <button class="active" type="button" data-view-target="learn"><span>⌂</span>Learn</button>
+      <button type="button" data-view-target="quiz"><span>?</span>Quiz</button>
+      <button type="button" data-view-target="test"><span>✓</span>Test</button>
+      <button type="button" data-view-target="rewards"><span>✦</span>Rewards</button>
+      <button type="button" data-view-target="profile"><span>●</span>Profile</button>
+    </nav>
+  </div>
+
+  <div id="paywallModal" class="modal" hidden>
+    <div class="modal-backdrop" data-close-modal="paywallModal"></div>
+    <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="paywallTitle">
+      <button class="modal-close" type="button" data-close-modal="paywallModal" aria-label="Close">×</button>
+      <div class="plus-mark">8<span>+</span></div>
+      <p class="eyebrow">EIGHT WORDS PLUS</p>
+      <h2 id="paywallTitle">Unlimited words for $1.99</h2>
+      <p><strong>$1.99 per month</strong> removes the daily cap. Learn as many words as you want, whenever you want.</p>
+      <ul class="benefit-list"><li>∞ No daily word limit</li><li>✦ Surprise-word explorer</li><li>✓ Deeper review and progress history</li><li>☁ Cloud progress in the production app</li></ul>
+      <button id="previewPlusButton" class="button button-primary" type="button">Preview unlimited Plus</button>
+      <small>This Windows build simulates the subscription. Apple handles the real purchase in the iPhone app.</small>
+    </section>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="data/words.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

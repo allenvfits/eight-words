@@ -1,0 +1,58 @@
+{
+  "identifier" : "4D5649C1-2F2A-4877-A1C7-8B3AE199A1DE",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+    "_applicationInternalID" : "1234567890",
+    "_developerTeamID" : "",
+    "_failTransactionsEnabled" : false,
+    "_locale" : "en_US",
+    "_renewalBillingIssuesEnabled" : false,
+    "_storefront" : "USA",
+    "_timeRate" : 0
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "994C0C83-B13A-469F-B650-AC824D35206B",
+      "localizations" : [
+
+      ],
+      "name" : "Eight Words Plus",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "1.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "5499397909",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Unlimited daily words across all three levels.",
+              "displayName" : "Eight Words Plus",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.eightwords.plus.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Eight Words Plus Monthly",
+          "subscriptionGroupID" : "994C0C83-B13A-469F-B650-AC824D35206B",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}
