@@ -56,6 +56,8 @@ The repository includes a submission-ready [App Store privacy answer sheet](APP-
 
 The exact App Store Connect fields, review notes, and remaining owner-only steps are in [`APP-STORE-SUBMISSION.md`](APP-STORE-SUBMISSION.md).
 
+Windows-only release is supported through the manual **Upload to TestFlight** GitHub Actions workflow. It uses an ephemeral macOS runner and encrypted `testflight` environment secrets; Apple private keys, certificates, and provisioning profiles must never be committed to this public repository.
+
 This build does not require an account, show advertising, or upload learning progress or saved words. It contacts Supabase only to download the read-only vocabulary catalog when configured. If you choose Apple's Kids Category, review the additional Kids Category rules before submitting.
 
 ## Product IDs

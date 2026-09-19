@@ -23,6 +23,20 @@ The project uses `com.allenvfits.eightwords`. Register that exact identifier in 
 
 Select the correct Apple Developer team in Xcode under **Signing & Capabilities**. Team credentials and signing certificates should stay out of GitHub.
 
+### 3. Windows-only TestFlight upload
+
+The manually triggered `.github/workflows/testflight.yml` workflow archives and uploads the app on a GitHub-hosted Mac. Create a protected GitHub environment named `testflight` and add these environment secrets:
+
+- `APPLE_TEAM_ID`
+- `APP_STORE_CONNECT_API_KEY_ID`
+- `APP_STORE_CONNECT_API_ISSUER_ID`
+- `APP_STORE_CONNECT_API_KEY_P8_BASE64`
+- `IOS_DISTRIBUTION_CERTIFICATE_BASE64`
+- `IOS_DISTRIBUTION_CERTIFICATE_PASSWORD`
+- `IOS_APP_STORE_PROFILE_BASE64`
+
+The Base64 values must be single-line encodings of the `.p8`, Apple Distribution `.p12`, and App Store `.mobileprovision` files. Never commit those files or values. After the matching app record, bundle ID, certificate, and profile exist, run **Actions > Upload to TestFlight > Run workflow**. The workflow validates the signed IPA before uploading it and uses the GitHub run number as the unique build number.
+
 ## Suggested App Store Connect metadata
 
 - **Name:** Eight Words
