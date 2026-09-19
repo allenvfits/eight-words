@@ -34,9 +34,9 @@ Prepare Eight Words for TestFlight and App Store review, add a secure Supabase-b
 
 ## Latest verification
 
-- GitHub Actions run `35438248250` passed on commit `42a03bb`: metadata/StoreKit validation, privacy manifest, icon dimensions and alpha, privileged-key scan, Xcode 26.6 Debug Simulator build, unsigned optimized Release device build, all nine unit tests, and the web JavaScript check.
-- GitHub Pages run `35438191375` passed after the privacy-policy update, and the public privacy/support URLs are deployed.
-- The 60-row Supabase seed updates the matching curated entries while the 3,000-word extended catalog remains bundled.
+- GitHub Actions run `35440379129` passed on commit `9b1951d`: catalog/StoreKit/privacy validation, icon dimensions and alpha, privileged-key scan, Xcode 26.6 Debug Simulator build, unsigned optimized Release device build with `WordCatalog.json`, all 12 unit tests, and both browser JavaScript syntax checks.
+- GitHub Pages run `35440207459` passed on commit `f2bba82`; the homepage, privacy, support, terms, and attribution URLs all returned HTTP 200 after deployment.
+- The 60-row optional Supabase seed updates matching curated entries while the 3,000-word extended catalog remains bundled.
 - The app continues to work from bundled data when Supabase is absent or unreachable.
 
 ## Waiting on the owner
