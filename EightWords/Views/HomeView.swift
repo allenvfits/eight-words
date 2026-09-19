@@ -99,7 +99,13 @@ struct HomeView: View {
         HStack(spacing: 12) {
             ZStack {
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(AppColors.ink)
+                    .fill(
+                        LinearGradient(
+                            colors: [AppColors.violet, AppColors.indigo],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
                     .frame(width: 46, height: 46)
                 Text("8")
                     .font(.system(size: 24, weight: .black, design: .rounded))
@@ -108,11 +114,11 @@ struct HomeView: View {
             .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 1) {
-                Text("EIGHT WORDS")
+                Text("EIGHTWISE")
                     .font(.system(size: 18, weight: .black, design: .rounded))
                     .tracking(1.1)
                     .foregroundStyle(AppColors.ink)
-                Text("A little smarter every day")
+                Text("Eight words. A little wiser.")
                     .font(.system(size: 14, weight: .semibold, design: .rounded))
                     .foregroundStyle(AppColors.muted)
             }
@@ -225,10 +231,16 @@ struct HomeView: View {
                 .foregroundStyle(AppColors.muted)
         }
         .padding(16)
-        .background(.white.opacity(0.9), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .background(AppColors.paper.opacity(0.94), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
         .overlay {
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .stroke(dailyStore.selectedDifficulty.color.opacity(0.35), lineWidth: 1.5)
+        }
+        .overlay(alignment: .leading) {
+            Capsule()
+                .fill(dailyStore.selectedDifficulty.color)
+                .frame(width: 6)
+                .padding(.vertical, 12)
         }
     }
 
@@ -346,10 +358,16 @@ struct HomeView: View {
             }
         }
         .padding(24)
-        .background(.white, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+        .background(AppColors.paper, in: UnevenRoundedRectangle(topLeadingRadius: 12, bottomLeadingRadius: 12, bottomTrailingRadius: 34, topTrailingRadius: 34, style: .continuous))
         .overlay {
-            RoundedRectangle(cornerRadius: 28, style: .continuous)
+            UnevenRoundedRectangle(topLeadingRadius: 12, bottomLeadingRadius: 12, bottomTrailingRadius: 34, topTrailingRadius: 34, style: .continuous)
                 .stroke(AppColors.line, lineWidth: 1)
+        }
+        .overlay(alignment: .leading) {
+            Capsule()
+                .fill(dailyStore.selectedDifficulty.color)
+                .frame(width: 7)
+                .padding(.vertical, 24)
         }
         .shadow(color: AppColors.ink.opacity(0.07), radius: 22, x: 0, y: 10)
         .transition(.asymmetric(
@@ -364,12 +382,12 @@ struct HomeView: View {
             HStack {
                 Text(subscriptionManager.isSubscribed ? "Keep your curiosity going" : "Your daily eight")
                     .font(.system(size: 13, weight: .bold, design: .rounded))
-                    .foregroundStyle(AppColors.muted)
+                    .foregroundStyle(.white.opacity(0.78))
                 Spacer()
                 if !subscriptionManager.isSubscribed {
                     Text("\(dailyStore.displayedFreePosition)/8")
                         .font(.system(size: 13, weight: .black, design: .rounded))
-                        .foregroundStyle(AppColors.ink)
+                        .foregroundStyle(.white)
                 }
             }
 
@@ -386,13 +404,22 @@ struct HomeView: View {
                 HStack(spacing: 6) {
                     ForEach(1...8, id: \.self) { position in
                         Capsule()
-                            .fill(position <= dailyStore.displayedFreePosition ? dailyStore.selectedDifficulty.color : AppColors.line)
+                            .fill(position <= dailyStore.displayedFreePosition ? dailyStore.selectedDifficulty.color : Color.white.opacity(0.2))
                             .frame(height: 7)
                     }
                 }
                 .accessibilityLabel("\(dailyStore.displayedFreePosition) of 8 words today")
             }
         }
+        .padding(16)
+        .background(
+            LinearGradient(
+                colors: [AppColors.ink, AppColors.violet.opacity(0.9)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            ),
+            in: UnevenRoundedRectangle(topLeadingRadius: 28, bottomLeadingRadius: 28, bottomTrailingRadius: 28, topTrailingRadius: 10, style: .continuous)
+        )
     }
 
     private var nextButton: some View {
@@ -407,7 +434,14 @@ struct HomeView: View {
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity)
             .frame(height: 58)
-            .background(AppColors.ink, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+            .background(
+                LinearGradient(
+                    colors: [AppColors.ink, AppColors.violet],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                ),
+                in: RoundedRectangle(cornerRadius: 18, style: .continuous)
+            )
             .shadow(color: AppColors.ink.opacity(0.2), radius: 12, x: 0, y: 7)
         }
         .buttonStyle(PressButtonStyle())
@@ -605,11 +639,15 @@ struct PressButtonStyle: ButtonStyle {
 }
 
 enum AppColors {
-    static let canvas = Color(red: 0.945, green: 0.973, blue: 0.949)
-    static let ink = Color(red: 0.125, green: 0.192, blue: 0.169)
-    static let muted = Color(red: 0.32, green: 0.38, blue: 0.36)
-    static let line = Color(red: 0.83, green: 0.89, blue: 0.85)
-    static let sun = Color(red: 0.95, green: 0.72, blue: 0.25)
+    static let canvas = Color(red: 0.961, green: 0.953, blue: 1.0)
+    static let paper = Color(red: 1.0, green: 1.0, blue: 1.0)
+    static let ink = Color(red: 0.09, green: 0.106, blue: 0.227)
+    static let muted = Color(red: 0.333, green: 0.357, blue: 0.471)
+    static let line = Color(red: 0.863, green: 0.847, blue: 0.957)
+    static let sun = Color(red: 1.0, green: 0.82, blue: 0.4)
+    static let violet = Color(red: 0.404, green: 0.341, blue: 0.851)
+    static let indigo = Color(red: 0.239, green: 0.404, blue: 0.839)
+    static let mint = Color(red: 0.396, green: 0.839, blue: 0.769)
 }
 
 #Preview {

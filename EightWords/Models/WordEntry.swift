@@ -34,9 +34,9 @@ enum Difficulty: String, CaseIterable, Codable, Identifiable, Sendable {
 
     var color: Color {
         switch self {
-        case .beginner: Color(red: 0.15, green: 0.55, blue: 0.42)
-        case .intermediate: Color(red: 0.31, green: 0.38, blue: 0.78)
-        case .advanced: Color(red: 0.78, green: 0.34, blue: 0.32)
+        case .beginner: Color(red: 0.08, green: 0.55, blue: 0.46)
+        case .intermediate: Color(red: 0.404, green: 0.341, blue: 0.851)
+        case .advanced: Color(red: 0.91, green: 0.31, blue: 0.24)
         }
     }
 }

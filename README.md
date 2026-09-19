@@ -83,4 +83,4 @@ No online account. No ads. No clutter. Local learner profiles keep progress, poi
 
 ## Generated app-icon prompt
 
-The icon was created with the built-in image-generation tool using this prompt: “Create a polished, minimalist iOS app icon for an age-inclusive vocabulary app called Eightwise. One bold, friendly number 8 as the only symbol, subtly formed from two overlapping speech bubbles. Crisp flat vector-like design; near-black charcoal, warm oat/cream, and a small golden-yellow accent; centered and legible at small sizes; no extra words or watermark.”
+The production icon was refined with the built-in image-generation tool using this prompt: “Recolor and refine the existing speech-bubble number 8 icon for Eightwise. Preserve the recognizable geometry; use deep midnight navy, electric violet, royal indigo, and mint; keep it crisp, centered, fully opaque, and legible at small sizes; no words, extra symbols, rounded-corner mask, or watermark.”
