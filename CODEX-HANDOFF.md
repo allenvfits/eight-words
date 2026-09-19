@@ -42,6 +42,13 @@ Do not guess or silently resolve these choices:
 4. **Signing:** no `DEVELOPMENT_TEAM` belongs in GitHub. The owner must select the Apple Developer team locally in Xcode.
 5. **Support contact:** the public support page currently links to GitHub Issues. Before submission, confirm a private support/privacy email address and add it to the support and privacy pages.
 
+## Known App Review follow-ups
+
+- When StoreKit product data is unavailable, the button says **Check App Store price**, but the current action can load the product and immediately open the purchase confirmation. Change this to show the localized product first and require a separate purchase tap.
+- Display `Product.displayName` explicitly on the paywall, while retaining the duration, localized renewal price, benefits, restore, Terms, and Privacy disclosures already present.
+- Disable Restore while another StoreKit operation is in progress and clear the pending-purchase notice if a later transaction update grants access.
+- Add StoreKitTest coverage or complete the equivalent Sandbox/TestFlight matrix for purchase, restore, pending approval, renewal, cancellation, expiration, and revocation.
+
 ## Important configuration state
 
 - `SUPABASE_PROJECT_URL` is empty in Debug and Release.
