@@ -8,3 +8,6 @@ xcuserdata/
 
 # macOS
 .DS_Store
+
+# Locally downloaded App Store screenshot artifacts
+AppStoreScreenshots/
