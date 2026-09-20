@@ -16,6 +16,28 @@ struct HomeView: View {
     @State private var cardIdentity = UUID()
     @State private var showingSyllables = false
 
+    init() {
+        // GitHub's screenshot workflow launches the shipping app with this
+        // environment value to capture real, deterministic App Store images.
+        // Normal App Store and TestFlight launches never set it.
+        switch ProcessInfo.processInfo.environment["EIGHTWISE_SCREENSHOT_STATE"] {
+        case "learn":
+            _showingSyllables = State(initialValue: true)
+        case "quiz":
+            _practiceMode = State(initialValue: .quiz)
+        case "test":
+            _practiceMode = State(initialValue: .test)
+        case "rewards":
+            _showingRewards = State(initialValue: true)
+        case "profiles":
+            _showingProfiles = State(initialValue: true)
+        case "plus":
+            _showingPaywall = State(initialValue: true)
+        default:
+            break
+        }
+    }
+
     private var word: WordEntry { dailyStore.currentWord }
 
     var body: some View {

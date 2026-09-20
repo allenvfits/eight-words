@@ -1,0 +1,133 @@
+name: Capture App Store Screenshots
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    runs-on: macos-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Build simulator app
+        shell: bash
+        run: |
+          set -euo pipefail
+          xcodebuild \
+            -project EightWords.xcodeproj \
+            -scheme EightWords \
+            -configuration Release \
+            -sdk iphonesimulator \
+            -derivedDataPath "$RUNNER_TEMP/DerivedData" \
+            CODE_SIGNING_ALLOWED=NO \
+            clean build
+
+      - name: Capture native iPhone and iPad screens
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          app_path="$(find "$RUNNER_TEMP/DerivedData/Build/Products/Release-iphonesimulator" -maxdepth 1 -name '*.app' -print -quit)"
+          test -n "$app_path"
+          mkdir -p AppStoreScreenshots/iPhone-6.9 AppStoreScreenshots/iPad-13
+
+          runtime="$(xcrun simctl list runtimes -j | python3 -c '
+          import json, sys
+          runtimes = [r for r in json.load(sys.stdin)["runtimes"] if r.get("isAvailable") and r["identifier"].startswith("com.apple.CoreSimulator.SimRuntime.iOS-")]
+          print(sorted(runtimes, key=lambda r: tuple(int(p) for p in r["version"].split(".")), reverse=True)[0]["identifier"])
+          ')"
+
+          iphone_type="$(xcrun simctl list devicetypes -j | python3 -c '
+          import json, sys
+          types = json.load(sys.stdin)["devicetypes"]
+          preferred = ["iPhone 16 Pro Max", "iPhone 15 Pro Max", "iPhone 14 Pro Max"]
+          for name in preferred:
+              match = next((d for d in types if d["name"] == name), None)
+              if match:
+                  print(match["identifier"])
+                  break
+          else:
+              raise SystemExit("No supported 6.9-inch iPhone simulator device type found")
+          ')"
+
+          ipad_type="$(xcrun simctl list devicetypes -j | python3 -c '
+          import json, sys
+          types = json.load(sys.stdin)["devicetypes"]
+          preferred = ["iPad Pro 13-inch (M4)", "iPad Pro (13-inch) (M4)", "iPad Pro (12.9-inch) (6th generation)"]
+          for name in preferred:
+              match = next((d for d in types if d["name"] == name), None)
+              if match:
+                  print(match["identifier"])
+                  break
+          else:
+              raise SystemExit("No supported 13-inch iPad simulator device type found")
+          ')"
+
+          capture_device() {
+            local name="$1"
+            local device_type="$2"
+            local output_dir="$3"
+            local udid
+            udid="$(xcrun simctl create "$name" "$device_type" "$runtime")"
+            xcrun simctl boot "$udid"
+            xcrun simctl bootstatus "$udid" -b
+            xcrun simctl status_bar "$udid" override --time '9:41' --batteryState charged --batteryLevel 100 --wifiBars 3 --cellularBars 4
+            xcrun simctl install "$udid" "$app_path"
+
+            local index=1
+            for state in learn quiz test rewards plus; do
+              xcrun simctl terminate "$udid" com.allenvfits.eightwise 2>/dev/null || true
+              SIMCTL_CHILD_EIGHTWISE_SCREENSHOT_STATE="$state" \
+                xcrun simctl launch "$udid" com.allenvfits.eightwise
+              sleep 4
+              xcrun simctl io "$udid" screenshot --type=png "$output_dir/0${index}-${state}.png"
+              index=$((index + 1))
+            done
+
+            xcrun simctl shutdown "$udid"
+            xcrun simctl delete "$udid"
+          }
+
+          capture_device Eightwise-iPhone "$iphone_type" AppStoreScreenshots/iPhone-6.9
+          capture_device Eightwise-iPad "$ipad_type" AppStoreScreenshots/iPad-13
+
+          verify_images() {
+            local directory="$1"
+            shift
+            local allowed_sizes=("$@")
+            local count=0
+            for path in "$directory"/*.png; do
+              count=$((count + 1))
+              local width height size matched=false
+              width="$(sips -g pixelWidth "$path" | awk '/pixelWidth:/ {print $2}')"
+              height="$(sips -g pixelHeight "$path" | awk '/pixelHeight:/ {print $2}')"
+              size="${width}x${height}"
+              for allowed in "${allowed_sizes[@]}"; do
+                if [[ "$size" == "$allowed" ]]; then matched=true; fi
+              done
+              if [[ "$matched" != true ]]; then
+                echo "Unexpected screenshot size for $path: $size"
+                exit 1
+              fi
+            done
+            if [[ "$count" -ne 5 ]]; then
+              echo "Expected five screenshots in $directory, found $count"
+              exit 1
+            fi
+          }
+
+          verify_images AppStoreScreenshots/iPhone-6.9 1260x2736 1290x2796 1320x2868
+          verify_images AppStoreScreenshots/iPad-13 2048x2732 2064x2752
+
+      - name: Upload screenshot artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: Eightwise-App-Store-Screenshots
+          path: AppStoreScreenshots
+          if-no-files-found: error
+          retention-days: 30
